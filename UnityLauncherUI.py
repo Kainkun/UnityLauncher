@@ -23,21 +23,28 @@ class Ui_MainWindow(object):
 "\n"
 "QPushButton\n"
 "{\n"
-"background-color: rgb(38, 38, 38);\n"
+"    background-color: rgb(38, 38, 38);\n"
 "}\n"
-"")
+"\n"
+"\n"
+"\n"
+"QHeaderView::section\n"
+"{\n"
+"    color: rgb(152, 153, 153);\n"
+"    background-color: rgb(38, 38, 38);\n"
+"    border: 1px solid rgb(48, 48, 48);\n"
+"\n"
+"}\n"
+"\n"
+"\n"
+"QTreeView::item:hover\n"
+"{\n"
+"    background: rgb(38, 38, 38);\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.titleLabel = QtWidgets.QLabel(self.centralwidget)
-        self.titleLabel.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.titleLabel.setFont(font)
-        self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.titleLabel.setObjectName("titleLabel")
-        self.gridLayout.addWidget(self.titleLabel, 0, 0, 1, 1)
         self.projectsScrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.projectsScrollArea.setWidgetResizable(True)
         self.projectsScrollArea.setObjectName("projectsScrollArea")
@@ -221,10 +228,50 @@ class Ui_MainWindow(object):
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem4)
         self.projectsScrollArea.setWidget(self.projectsContents)
-        self.gridLayout.addWidget(self.projectsScrollArea, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.projectsScrollArea, 4, 0, 1, 3)
+        self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.searchLineEdit.setObjectName("searchLineEdit")
+        self.gridLayout.addWidget(self.searchLineEdit, 3, 1, 1, 2)
+        self.titleLabel = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.titleLabel.sizePolicy().hasHeightForWidth())
+        self.titleLabel.setSizePolicy(sizePolicy)
+        self.titleLabel.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.titleLabel.setFont(font)
+        self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.titleLabel.setObjectName("titleLabel")
+        self.gridLayout.addWidget(self.titleLabel, 2, 0, 1, 1)
+        self.openButton_5 = QtWidgets.QPushButton(self.centralwidget)
+        self.openButton_5.setObjectName("openButton_5")
+        self.gridLayout.addWidget(self.openButton_5, 2, 1, 1, 1)
+        self.newProjectButton = QtWidgets.QPushButton(self.centralwidget)
+        self.newProjectButton.setObjectName("newProjectButton")
+        self.gridLayout.addWidget(self.newProjectButton, 2, 2, 1, 1)
         self.testButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.testButton.sizePolicy().hasHeightForWidth())
+        self.testButton.setSizePolicy(sizePolicy)
+        self.testButton.setMinimumSize(QtCore.QSize(150, 0))
+        self.testButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.testButton.setObjectName("testButton")
-        self.gridLayout.addWidget(self.testButton, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.testButton, 3, 0, 1, 1)
+        self.treeWidget = QtWidgets.QTreeWidget(self.centralwidget)
+        self.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.treeWidget.setObjectName("treeWidget")
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        self.gridLayout.addWidget(self.treeWidget, 5, 0, 1, 3)
+        self.gridLayout.setColumnStretch(0, 4)
+        self.gridLayout.setColumnStretch(1, 1)
+        self.gridLayout.setColumnStretch(2, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 702, 18))
@@ -240,7 +287,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Unity Launcher"))
-        self.titleLabel.setText(_translate("MainWindow", "Unity Projects"))
         self.description.setText(_translate("MainWindow", "desc"))
         self.openButton.setText(_translate("MainWindow", "Open"))
         self.title.setText(_translate("MainWindow", "title"))
@@ -253,7 +299,23 @@ class Ui_MainWindow(object):
         self.description_4.setText(_translate("MainWindow", "desc"))
         self.openButton_4.setText(_translate("MainWindow", "Open"))
         self.title_4.setText(_translate("MainWindow", "title"))
+        self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
+        self.titleLabel.setText(_translate("MainWindow", "Projects"))
+        self.openButton_5.setText(_translate("MainWindow", "Open"))
+        self.newProjectButton.setText(_translate("MainWindow", "New Project"))
         self.testButton.setText(_translate("MainWindow", "Test Button"))
+        self.treeWidget.setSortingEnabled(True)
+        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "ICON"))
+        self.treeWidget.headerItem().setText(1, _translate("MainWindow", "NAME"))
+        self.treeWidget.headerItem().setText(2, _translate("MainWindow", "MODIFIED"))
+        self.treeWidget.headerItem().setText(3, _translate("MainWindow", "EDITOR VERSION"))
+        __sortingEnabled = self.treeWidget.isSortingEnabled()
+        self.treeWidget.setSortingEnabled(False)
+        self.treeWidget.topLevelItem(0).setText(1, _translate("MainWindow", "1"))
+        self.treeWidget.topLevelItem(1).setText(1, _translate("MainWindow", "22"))
+        self.treeWidget.topLevelItem(2).setText(1, _translate("MainWindow", "333"))
+        self.treeWidget.topLevelItem(3).setText(1, _translate("MainWindow", "4444"))
+        self.treeWidget.setSortingEnabled(__sortingEnabled)
 import resource_rc
 
 

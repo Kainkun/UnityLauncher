@@ -22,34 +22,28 @@
 
 QPushButton
 {
-background-color: rgb(38, 38, 38);
+	background-color: rgb(38, 38, 38);
 }
-</string>
+
+
+
+QHeaderView::section
+{
+	color: rgb(152, 153, 153);
+	background-color: rgb(38, 38, 38);
+	border: 1px solid rgb(48, 48, 48);
+
+}
+
+
+QTreeView::item:hover
+{
+	background: rgb(38, 38, 38);
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="titleLabel">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>15</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Unity Projects</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="4,1,1">
+    <item row="4" column="0" colspan="3">
      <widget class="QScrollArea" name="projectsScrollArea">
       <property name="widgetResizable">
        <bool>true</bool>
@@ -497,11 +491,139 @@ background-color: rgb(38, 38, 38);
       </widget>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="3" column="1" colspan="2">
+     <widget class="QLineEdit" name="searchLineEdit">
+      <property name="placeholderText">
+       <string>Search</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="titleLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Projects</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="openButton_5">
+      <property name="text">
+       <string>Open</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="newProjectButton">
+      <property name="text">
+       <string>New Project</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
      <widget class="QPushButton" name="testButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="text">
        <string>Test Button</string>
       </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="3">
+     <widget class="QTreeWidget" name="treeWidget">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>ICON</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>NAME</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>MODIFIED</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>EDITOR VERSION</string>
+       </property>
+      </column>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string>22</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string>333</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string>4444</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>
