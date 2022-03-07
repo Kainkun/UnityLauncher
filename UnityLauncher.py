@@ -49,6 +49,7 @@ class ProjectData:
         self.projectWidgetLayout.addItem(self.spacerItem, 0, 1, 2, 1)
         self.descriptionLabel = QtWidgets.QLabel(self.projectWidget)
         self.descriptionLabel.setObjectName("description")
+        self.descriptionLabel.setWordWrap(True)
         self.projectWidgetLayout.addWidget(self.descriptionLabel, 1, 3, 1, 1)
         self.openButton = QtWidgets.QPushButton(self.projectWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
