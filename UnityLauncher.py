@@ -71,7 +71,7 @@ class ProjectData:
         self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
         self.iconLabel.setText("")
         if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIcon.png"))
+            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
         else:
             self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
         self.iconLabel.setScaledContents(True)

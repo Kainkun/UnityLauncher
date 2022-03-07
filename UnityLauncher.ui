@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Unity Launcher</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Images/UnityIconBlack.png</normaloff>Images/UnityIconBlack.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">*
 {

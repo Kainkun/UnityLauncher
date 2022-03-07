@@ -15,6 +15,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(702, 470)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("Images/UnityIconBlack.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("*\n"
 "{\n"
 "    background-color: rgb(26, 26, 26);\n"
