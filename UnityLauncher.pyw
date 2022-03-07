@@ -1,19 +1,19 @@
 import os
-os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
-#os.system("pyrcc5 resource.qrc -o resource_rc.py")
+import sys
+
+if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
+    applicationPath = os.path.dirname(sys.executable)
+else:
+    os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
+    #os.system("pyrcc5 resource.qrc -o resource_rc.py")
+    applicationPath = os.path.abspath(".")
 
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import sys
 import subprocess
 from UnityLauncherUI import Ui_MainWindow
 
-
-class ClickableFrame(QtWidgets.QFrame):
-    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
-        print("clicked")
-        return super().mouseReleaseEvent(event)
 
 class ProjectData:
     def openProject(self):
@@ -21,7 +21,7 @@ class ProjectData:
             print("Could not find valid unity editor path")
             return
 
-        subprocess.run([self.unityPath, '-projectPath', self.projectPath])
+        subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
         #command = r'Start {0} -projectPath {1}'.format(self.unityPath, self.projectPath)
         #print(command)
         #os.system(command)
@@ -105,11 +105,11 @@ class UiImplement(Ui_MainWindow):
 
     def addProjectsToList(self):
         
-        with open(r'Config\UnityProjectsFolders.txt') as unityProjectsConfig:
+        with open(os.path.join(applicationPath, r'Config\UnityProjectsFolders.txt')) as unityProjectsConfig:
             projectsFolderList = unityProjectsConfig.readlines()
             for i in range(len(projectsFolderList)):
                 projectsFolderList[i] = projectsFolderList[i].replace("/", "\\").rstrip()
-        with open(r'Config\UnityEditorsFolders.txt') as unityEditorsConfig:
+        with open(os.path.join(applicationPath, r'Config\UnityEditorsFolders.txt')) as unityEditorsConfig:
             unityEditorsFolderList = unityEditorsConfig.readlines()
             for i in range(len(unityEditorsFolderList)):
                 unityEditorsFolderList[i] = unityEditorsFolderList[i].replace("/", "\\").rstrip()
