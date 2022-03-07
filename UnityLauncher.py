@@ -26,7 +26,7 @@ class ProjectData:
         #print(command)
         #os.system(command)
         
-    def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
+    def __init__(self, parent: QtWidgets.QListWidget, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
         self.title = title
         self.description = description
         self.iconPath = iconPath
@@ -53,17 +53,8 @@ class ProjectData:
         self.descriptionLabel.setObjectName("description")
         self.descriptionLabel.setWordWrap(True)
         self.projectWidgetLayout.addWidget(self.descriptionLabel, 1, 3, 1, 1)
-        self.openButton = QtWidgets.QPushButton(self.projectWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.openButton.sizePolicy().hasHeightForWidth())
-        self.openButton.setSizePolicy(sizePolicy)
-        self.openButton.setMinimumSize(QtCore.QSize(100, 0))
-        self.openButton.setObjectName("openButton")
         if(unityPath == None):
-            self.openButton.setStyleSheet("color: rgb(100, 100, 100); background-color: rgb(10, 10, 10);")
-        self.projectWidgetLayout.addWidget(self.openButton, 0, 4, 2, 1)
+            self.projectWidget.setStyleSheet("color: rgb(100, 100, 100); background-color: rgb(10, 10, 10);")
         self.iconLabel = QtWidgets.QLabel(self.projectWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -84,12 +75,13 @@ class ProjectData:
         self.projectWidgetLayout.addWidget(self.titleLabel, 0, 3, 1, 1)
 
         self.descriptionLabel.setText(description)
-        self.openButton.setText("Open")
         self.titleLabel.setText(title)
 
-        layout.addWidget(self.projectWidget)
-
-        self.openButton.clicked.connect(lambda: self.openProject())
+        self.item = QtWidgets.QListWidgetItem(title, parent)
+        self.item.setSizeHint(QtCore.QSize(100,100))
+        self.item.setData(0, self)
+        parent.addItem(self.item)
+        parent.setItemWidget(self.item, self.projectWidget)
 
 class UiImplement(Ui_MainWindow):
     def __init__(self):
@@ -100,7 +92,7 @@ class UiImplement(Ui_MainWindow):
         self.titleLabel.setText("bazinga")
 
     def addProjectToList(self, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
-        projectData = ProjectData(self.projectsContents, self.projectsContentsLayout, title, description, iconPath, projectPath, unityPath)
+        projectData = ProjectData(self.projectList, title, description, iconPath, projectPath, unityPath)
         self.projectDatas.append(projectData)
 
     def addProjectsToList(self):
@@ -155,12 +147,27 @@ class UiImplement(Ui_MainWindow):
                 self.addProjectToList(projectFolderName, description, iconPath, projectPath, unityPath)
 
 
+    def openProjectClick(self, item: QtWidgets.QListWidgetItem):
+        item.data(0).openProject()
+    
+    def highlight(self, item: QtWidgets.QListWidgetItem):
+        print("enter")
+        widget = self.projectList.itemWidget(item)
+        widget.setStyleSheet("background-color: rgb(255,0,0);")
+
+    def mouseMouse(self, event: QtGui.QMouseEvent):
+        widget = self.projectList.itemWidget(self.projectList.itemAt(event.pos()))
+        widget.setStyleSheet("background-color: rgb(255,0,0);")
+
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
 
         self.addProjectsToList()
-        spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.projectsContentsLayout.addItem(spacer)
+        self.projectList.sortItems(QtCore.Qt.SortOrder.DescendingOrder)
+        self.projectList.setMouseTracking(True)
+        #self.projectList.itemEntered.connect(lambda item: self.highlight(item))
+        #self.projectList.mouseMoveEvent = lambda event: self.mouseMouse(event)
+        self.projectList.itemClicked.connect(lambda item: self.openProjectClick(item))
 
         self.testButton.clicked.connect(lambda: self.speak())
         #self.openButton.clicked.connect(lambda: OpenUnityProject())
