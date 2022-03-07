@@ -121,49 +121,39 @@ QTreeView::item:hover
      </widget>
     </item>
     <item row="4" column="0" colspan="3">
-     <widget class="QWidget" name="sortButtons" native="true">
-      <layout class="QGridLayout" name="sortButtonsLayout">
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(152, 153, 153);
-background-color: rgb(38, 38, 38);
-border: 1px solid rgb(48, 48, 48);</string>
-         </property>
-         <property name="text">
-          <string>EDITOR VERSION</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(152, 153, 153);
-background-color: rgb(38, 38, 38);
-border: 1px solid rgb(48, 48, 48);</string>
-         </property>
-         <property name="text">
-          <string>MODIFIED</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(152, 153, 153);
-background-color: rgb(38, 38, 38);
-border: 1px solid rgb(48, 48, 48);</string>
-         </property>
-         <property name="text">
-          <string>NAME</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <widget class="QTreeWidget" name="projectTree">
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>ICON</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>NAME</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>DESCRIPTION</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>MODIFIED</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>EDITOR VERSION</string>
+       </property>
+      </column>
      </widget>
-    </item>
-    <item row="5" column="0" colspan="3">
-     <widget class="QListWidget" name="projectList"/>
     </item>
    </layout>
   </widget>

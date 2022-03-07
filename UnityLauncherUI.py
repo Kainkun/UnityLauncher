@@ -80,32 +80,10 @@ class Ui_MainWindow(object):
         self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.searchLineEdit.setObjectName("searchLineEdit")
         self.centralwidgetLayout.addWidget(self.searchLineEdit, 3, 1, 1, 2)
-        self.sortButtons = QtWidgets.QWidget(self.centralwidget)
-        self.sortButtons.setObjectName("sortButtons")
-        self.sortButtonsLayout = QtWidgets.QGridLayout(self.sortButtons)
-        self.sortButtonsLayout.setObjectName("sortButtonsLayout")
-        self.pushButton_3 = QtWidgets.QPushButton(self.sortButtons)
-        self.pushButton_3.setStyleSheet("color: rgb(152, 153, 153);\n"
-"background-color: rgb(38, 38, 38);\n"
-"border: 1px solid rgb(48, 48, 48);")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.sortButtonsLayout.addWidget(self.pushButton_3, 0, 2, 1, 1)
-        self.pushButton_2 = QtWidgets.QPushButton(self.sortButtons)
-        self.pushButton_2.setStyleSheet("color: rgb(152, 153, 153);\n"
-"background-color: rgb(38, 38, 38);\n"
-"border: 1px solid rgb(48, 48, 48);")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.sortButtonsLayout.addWidget(self.pushButton_2, 0, 1, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(self.sortButtons)
-        self.pushButton.setStyleSheet("color: rgb(152, 153, 153);\n"
-"background-color: rgb(38, 38, 38);\n"
-"border: 1px solid rgb(48, 48, 48);")
-        self.pushButton.setObjectName("pushButton")
-        self.sortButtonsLayout.addWidget(self.pushButton, 0, 0, 1, 1)
-        self.centralwidgetLayout.addWidget(self.sortButtons, 4, 0, 1, 3)
-        self.projectList = QtWidgets.QListWidget(self.centralwidget)
-        self.projectList.setObjectName("projectList")
-        self.centralwidgetLayout.addWidget(self.projectList, 5, 0, 1, 3)
+        self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
+        self.projectTree.setWordWrap(True)
+        self.projectTree.setObjectName("projectTree")
+        self.centralwidgetLayout.addWidget(self.projectTree, 4, 0, 1, 3)
         self.centralwidgetLayout.setColumnStretch(0, 4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -127,9 +105,12 @@ class Ui_MainWindow(object):
         self.titleLabel.setText(_translate("MainWindow", "Projects"))
         self.testButton.setText(_translate("MainWindow", "Test Button"))
         self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
-        self.pushButton_3.setText(_translate("MainWindow", "EDITOR VERSION"))
-        self.pushButton_2.setText(_translate("MainWindow", "MODIFIED"))
-        self.pushButton.setText(_translate("MainWindow", "NAME"))
+        self.projectTree.setSortingEnabled(True)
+        self.projectTree.headerItem().setText(0, _translate("MainWindow", "ICON"))
+        self.projectTree.headerItem().setText(1, _translate("MainWindow", "NAME"))
+        self.projectTree.headerItem().setText(2, _translate("MainWindow", "DESCRIPTION"))
+        self.projectTree.headerItem().setText(3, _translate("MainWindow", "MODIFIED"))
+        self.projectTree.headerItem().setText(4, _translate("MainWindow", "EDITOR VERSION"))
 
 
 if __name__ == "__main__":
