@@ -16,8 +16,13 @@ class ClickableFrame(QtWidgets.QFrame):
 
 class ProjectData:
     def openProject(self):
-        print(r"{0} -projectPath {1}".format(self.unityPath, self.projectPath))
-        os.system(r"{0} -projectPath {1}".format(self.unityPath, self.projectPath))
+        if(self.unityPath == None):
+            print("Could not find valid unity editor path")
+            return
+
+        command = r'Start {0} -projectPath {1}'.format(self.unityPath, self.projectPath)
+        print(command)
+        os.system(command)
         
     def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
         self.title = title
@@ -53,6 +58,8 @@ class ProjectData:
         self.openButton.setSizePolicy(sizePolicy)
         self.openButton.setMinimumSize(QtCore.QSize(100, 0))
         self.openButton.setObjectName("openButton")
+        if(unityPath == None):
+            self.openButton.setStyleSheet("color: rgb(100, 100, 100); background-color: rgb(10, 10, 10);")
         self.projectWidgetLayout.addWidget(self.openButton, 0, 4, 2, 1)
         self.iconLabel = QtWidgets.QLabel(self.projectWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
@@ -93,41 +100,62 @@ class UiImplement(Ui_MainWindow):
         projectData = ProjectData(self.projectsContents, self.projectsContentsLayout, title, description, iconPath, projectPath, unityPath)
         self.projectDatas.append(projectData)
 
-    def addProjectsToList(self, projectsFolderPath: str):
-        if(not os.path.exists(projectsFolderPath)):
-            print('Error: Project Folder "{0}" Does Not Exist'.format(projectFolderName))
-            return
-            
-        for projectFolderName in os.listdir(projectsFolderPath):
-            projectPath = os.path.join(projectsFolderPath, projectFolderName)
+    def addProjectsToList(self):
+        
+        with open(r'Config\UnityProjectsFolders.txt') as unityProjectsConfig:
+            projectsFolderList = unityProjectsConfig.readlines()
+            for i in range(len(projectsFolderList)):
+                projectsFolderList[i] = projectsFolderList[i].replace("/", "\\").rstrip()
+        with open(r'Config\UnityEditorsFolders.txt') as unityEditorsConfig:
+            unityEditorsFolderList = unityEditorsConfig.readlines()
+            for i in range(len(unityEditorsFolderList)):
+                unityEditorsFolderList[i] = unityEditorsFolderList[i].replace("/", "\\").rstrip()
 
-            descriptionFilePath = os.path.join(projectPath, "desc.txt")
-            if(os.path.exists(descriptionFilePath)):
-                with open(descriptionFilePath) as descriptionFile:
-                    description = descriptionFile.read()
-            else:
-                description = ""
-
-            iconPath = os.path.join(projectPath, "icon.png")
-            if(not os.path.exists(iconPath)):
-                iconPath = None
-
-            versionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
-            if(not os.path.exists(versionPath)):
-                print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
+        for projectsFolderPath in projectsFolderList:
+            if(not os.path.exists(projectsFolderPath)):
+                print('Error: Projects Folder "{0}" Does Not Exist'.format(projectsFolderPath))
                 continue
-            with open(versionPath) as versionPathFile:
-                firstline = versionPathFile.readline().rstrip()
-            version = firstline.split(" ")[1]
-            unityPath = os.path.join(r"C:\Other\Unity\Editors", version, r"Editor\Unity.exe")
-            
-            self.addProjectToList(projectFolderName, description, iconPath, projectPath, unityPath)
+                
+            for projectFolderName in os.listdir(projectsFolderPath):
+                projectPath = os.path.join(projectsFolderPath, projectFolderName)
+
+                if(not os.path.exists(projectPath)):
+                    print('Error: Project Folder "{0}" Does Not Exist'.format(projectPath))
+                    continue
+
+                descriptionFilePath = os.path.join(projectPath, "desc.txt")
+                if(os.path.exists(descriptionFilePath)):
+                    with open(descriptionFilePath) as descriptionFile:
+                        description = descriptionFile.read()
+                else:
+                    description = ""
+
+                iconPath = os.path.join(projectPath, "icon.png")
+                if(not os.path.exists(iconPath)):
+                    iconPath = None
+
+                versionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
+                if(not os.path.exists(versionPath)):
+                    print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
+                    continue
+                with open(versionPath) as versionPathFile:
+                    firstline = versionPathFile.readline().rstrip()
+                version = firstline.split(" ")[1]
+
+                unityPath = None
+                for unityEditorFolder in unityEditorsFolderList:
+                    tryUnityPath = os.path.join(unityEditorFolder, version, r"Editor\Unity.exe")
+                    if(os.path.exists(tryUnityPath)):
+                        unityPath = tryUnityPath
+                        break
+                
+                self.addProjectToList(projectFolderName, description, iconPath, projectPath, unityPath)
 
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
 
-        self.addProjectsToList(r"C:\Other\Unity\Projects")
+        self.addProjectsToList()
         spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.projectsContentsLayout.addItem(spacer)
 
