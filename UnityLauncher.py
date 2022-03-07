@@ -14,18 +14,17 @@ class ClickableFrame(QtWidgets.QFrame):
         print("clicked")
         return super().mouseReleaseEvent(event)
 
-
-def OpenUnityProject():
-    unityPath = r"C:\Other\Unity\Editors\2020.3.22f1\Editor\Unity.exe"
-    projectPath = r"C:\Other\Unity\Projects\DeletedMemories"
-    os.system("{0} -projectPath {1}".format(unityPath, projectPath))
-
 class ProjectData:
-    def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, projectPath: str, iconPath: str):
+    def openProject(self):
+        print(r"{0} -projectPath {1}".format(self.unityPath, self.projectPath))
+        os.system(r"{0} -projectPath {1}".format(self.unityPath, self.projectPath))
+        
+    def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
         self.title = title
         self.description = description
-        self.projectPath = projectPath
         self.iconPath = iconPath
+        self.projectPath = projectPath
+        self.unityPath = unityPath
 
         self.projectWidget = QtWidgets.QFrame(parent)
         #projectWidget.setFixedHeight(250)
@@ -80,6 +79,8 @@ class ProjectData:
 
         layout.addWidget(self.projectWidget)
 
+        self.openButton.clicked.connect(lambda: self.openProject())
+
 class UiImplement(Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -88,13 +89,13 @@ class UiImplement(Ui_MainWindow):
     def speak(self):
         self.titleLabel.setText("bazinga")
 
-    def addProjectToList(self, title: str, description: str, path: str, icon):
-        projectData = ProjectData(self.projectsContents, self.projectsContentsLayout, title, description, path, icon)
+    def addProjectToList(self, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
+        projectData = ProjectData(self.projectsContents, self.projectsContentsLayout, title, description, iconPath, projectPath, unityPath)
         self.projectDatas.append(projectData)
 
     def addProjectsToList(self, projectsFolderPath: str):
         if(not os.path.exists(projectsFolderPath)):
-            print("Error: Project Folder Does Not Exist")
+            print('Error: Project Folder "{0}" Does Not Exist'.format(projectFolderName))
             return
             
         for projectFolderName in os.listdir(projectsFolderPath):
@@ -102,16 +103,25 @@ class UiImplement(Ui_MainWindow):
 
             descriptionFilePath = os.path.join(projectPath, "desc.txt")
             if(os.path.exists(descriptionFilePath)):
-                descriptionFile = open(descriptionFilePath, "r")
-                description = descriptionFile.read()
+                with open(descriptionFilePath) as descriptionFile:
+                    description = descriptionFile.read()
             else:
                 description = ""
 
-            iconFilePath = os.path.join(projectPath, "icon.png")
-            if(not os.path.exists(iconFilePath)):
-                iconFilePath = None
+            iconPath = os.path.join(projectPath, "icon.png")
+            if(not os.path.exists(iconPath)):
+                iconPath = None
+
+            versionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
+            if(not os.path.exists(versionPath)):
+                print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
+                continue
+            with open(versionPath) as versionPathFile:
+                firstline = versionPathFile.readline().rstrip()
+            version = firstline.split(" ")[1]
+            unityPath = os.path.join(r"C:\Other\Unity\Editors", version, r"Editor\Unity.exe")
             
-            self.addProjectToList(projectFolderName, description, projectPath, iconFilePath)
+            self.addProjectToList(projectFolderName, description, iconPath, projectPath, unityPath)
 
 
     def setupUi(self, MainWindow):
