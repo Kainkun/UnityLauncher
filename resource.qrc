@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="images">
-    <file>Images/UnityIcon.png</file>
-    <file>Images/UnityLogo.png</file>
-  </qresource>
-</RCC>

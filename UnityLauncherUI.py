@@ -134,7 +134,6 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "MODIFIED"))
         self.testButton.setText(_translate("MainWindow", "Test Button"))
         self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
-import resource_rc
 
 
 if __name__ == "__main__":
