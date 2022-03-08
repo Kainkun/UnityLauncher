@@ -1,114 +1,163 @@
 import os
-os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
-#os.system("pyrcc5 resource.qrc -o resource_rc.py")
+import sys
+
+if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
+    applicationPath = os.path.dirname(sys.executable)
+else:
+    os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
+    #os.system("pyrcc5 resource.qrc -o resource_rc.py")
+    applicationPath = os.path.abspath(".")
 
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+<<<<<<< HEAD
 import sys
 import subprocess
+=======
+import subprocess
+import time
+>>>>>>> b2e20cd425bbc8b22b1e820d156bd2b4bf940056
 from UnityLauncherUI import Ui_MainWindow
 
+class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
+    def __lt__( self, other ):
+        if ( not isinstance(other, CustomSortTreeWidgetItem) ):
+            return super(CustomSortTreeWidgetItem, self).__lt__(other)
 
-class ClickableFrame(QtWidgets.QFrame):
-    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
-        print("clicked")
-        return super().mouseReleaseEvent(event)
+        tree = self.treeWidget()
+        if ( not tree ):
+            column = 0
+        else:
+            column = tree.sortColumn()
+
+        return self.sortData(column) < other.sortData(column)
+
+    def __init__( self, *args ):
+        super(CustomSortTreeWidgetItem, self).__init__(*args)
+        self._sortData = {}
+
+    def sortData( self, column ):
+        return self._sortData.get(column, self.text(column))
+
+    def setSortData( self, column, data ):
+        self._sortData[column] = data
+
 
 class ProjectData:
     def openProject(self):
         if(self.unityPath == None):
             print("Could not find valid unity editor path")
             return
+<<<<<<< HEAD
 
         subprocess.run([self.unityPath, '-projectPath', self.projectPath])
         # command = r'"{0}" -projectPath "{1}"'.format(self.unityPath, self.projectPath)
         # print(command)
         # os.system(command)
+=======
+        subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
+>>>>>>> b2e20cd425bbc8b22b1e820d156bd2b4bf940056
         
-    def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
-        self.title = title
-        self.description = description
+    def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
         self.iconPath = iconPath
-        self.projectPath = projectPath
+        self.name = name
+        self.description = description
+        self.editorVersion = editorVersion
         self.unityPath = unityPath
+        self.projectPath = projectPath
 
-        self.projectWidget = QtWidgets.QFrame(parent)
-        #projectWidget.setFixedHeight(250)
-        #sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        #sizePolicy.setHorizontalStretch(0)
-        #sizePolicy.setVerticalStretch(0)
-        #sizePolicy.setHeightForWidth(projectWidget.sizePolicy().hasHeightForWidth())
-        #projectWidget.setSizePolicy(sizePolicy)
-        #projectWidget.setMinimumSize(QtCore.QSize(0, 10))
-        #projectWidget.setMaximumSize(QtCore.QSize(16777215, 120))
-        self.projectWidget.setFrameShape(QtWidgets.QFrame.Box)
-        self.projectWidget.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.projectWidget.setObjectName("projectsContents")
-        self.projectWidgetLayout = QtWidgets.QGridLayout(self.projectWidget)
-        self.projectWidgetLayout.setObjectName("projectsContentsLayout")
-        self.spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.projectWidgetLayout.addItem(self.spacerItem, 0, 1, 2, 1)
-        self.descriptionLabel = QtWidgets.QLabel(self.projectWidget)
-        self.descriptionLabel.setObjectName("description")
-        self.projectWidgetLayout.addWidget(self.descriptionLabel, 1, 3, 1, 1)
-        self.openButton = QtWidgets.QPushButton(self.projectWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.openButton.sizePolicy().hasHeightForWidth())
-        self.openButton.setSizePolicy(sizePolicy)
-        self.openButton.setMinimumSize(QtCore.QSize(100, 0))
-        self.openButton.setObjectName("openButton")
-        if(unityPath == None):
-            self.openButton.setStyleSheet("color: rgb(100, 100, 100); background-color: rgb(10, 10, 10);")
-        self.projectWidgetLayout.addWidget(self.openButton, 0, 4, 2, 1)
-        self.iconLabel = QtWidgets.QLabel(self.projectWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.iconLabel.sizePolicy().hasHeightForWidth())
-        self.iconLabel.setSizePolicy(sizePolicy)
+        self.rowWidget = CustomSortTreeWidgetItem(parent)
+        self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
+
+        ####ICON#### #TODO make scale correctly
+        self.iconLabel = QtWidgets.QLabel(parent)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHeightForWidth(self.iconLabel.sizePolicy().hasWidthForHeight())
+        # self.iconLabel.setSizePolicy(sizePolicy)
+        self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
         self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
-        self.iconLabel.setText("")
         if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIcon.png"))
+            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
+            iconPath = ""
         else:
             self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
         self.iconLabel.setScaledContents(True)
         self.iconLabel.setObjectName("icon")
-        self.projectWidgetLayout.addWidget(self.iconLabel, 0, 0, 2, 1)
-        self.titleLabel = QtWidgets.QLabel(self.projectWidget)
-        self.titleLabel.setObjectName("title")
-        self.projectWidgetLayout.addWidget(self.titleLabel, 0, 3, 1, 1)
 
-        self.descriptionLabel.setText(description)
-        self.openButton.setText("Open")
-        self.titleLabel.setText(title)
+        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
+        self.rowWidget.setSortData(0, iconPath)
 
-        layout.addWidget(self.projectWidget)
 
-        self.openButton.clicked.connect(lambda: self.openProject())
+        ####NAME####
+        self.rowWidget.setText(1, name)
+
+
+        ####DESCRIPTION####
+        self.rowWidget.setText(2, description)
+
+
+        ####MODIFIED####
+        lastModifiedEpic = os.path.getmtime(self.projectPath)
+        secondsSinceModified = (time.time() - lastModifiedEpic)
+
+        minutes = secondsSinceModified/60
+        hours = minutes/60
+        days = hours/24
+        months = days/30
+        years = days/365
+
+        if(years >= 1):
+            timeSinceModifiedDisplay = str(round(years, 1))  + " years ago"
+        elif(months >= 1):
+            if(round(months) == 1):
+                timeSinceModifiedDisplay = "a month ago"
+            else:
+                timeSinceModifiedDisplay = str(round(months))  + " months ago"
+        elif(days >= 1):
+            if(round(days) == 1):
+                timeSinceModifiedDisplay = "a day ago"
+            else:
+                timeSinceModifiedDisplay = str(round(days))  + " days ago"
+        elif(hours >= 1):
+            if(round(hours) == 1):
+                timeSinceModifiedDisplay = "an hour ago"
+            else:
+                timeSinceModifiedDisplay = str(round(hours))  + " hours ago"
+        elif(minutes >= 1):
+            if(round(minutes) == 1):
+                timeSinceModifiedDisplay = "a minute ago"
+            else:
+                timeSinceModifiedDisplay = str(round(minutes))  + " minutes ago"
+        else:
+            if(round(secondsSinceModified) == 1):
+                timeSinceModifiedDisplay = "a second ago"
+            else:
+                timeSinceModifiedDisplay = str(round(secondsSinceModified)) + " seconds ago"
+
+        self.rowWidget.setText(3, timeSinceModifiedDisplay)
+        self.rowWidget.setSortData(3, secondsSinceModified)
+
+
+        ####EDITOR VERSION####
+        self.rowWidget.setText(4, self.editorVersion)
+
+
+        parent.addTopLevelItem(self.rowWidget)
+
 
 class UiImplement(Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.projectDatas = []
-
     def speak(self):
         self.titleLabel.setText("bazinga")
 
-    def addProjectToList(self, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
-        projectData = ProjectData(self.projectsContents, self.projectsContentsLayout, title, description, iconPath, projectPath, unityPath)
-        self.projectDatas.append(projectData)
-
     def addProjectsToList(self):
-        
-        with open(r'Config\UnityProjectsFolders.txt') as unityProjectsConfig:
+        with open(os.path.join(applicationPath, r'Config\UnityProjectsFolders.txt')) as unityProjectsConfig:
             projectsFolderList = unityProjectsConfig.readlines()
             for i in range(len(projectsFolderList)):
                 projectsFolderList[i] = projectsFolderList[i].replace("/", "\\").rstrip()
-        with open(r'Config\UnityEditorsFolders.txt') as unityEditorsConfig:
+        with open(os.path.join(applicationPath, r'Config\UnityEditorsFolders.txt')) as unityEditorsConfig:
             unityEditorsFolderList = unityEditorsConfig.readlines()
             for i in range(len(unityEditorsFolderList)):
                 unityEditorsFolderList[i] = unityEditorsFolderList[i].replace("/", "\\").rstrip()
@@ -136,39 +185,43 @@ class UiImplement(Ui_MainWindow):
                 if(not os.path.exists(iconPath)):
                     iconPath = None
 
-                versionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
-                if(not os.path.exists(versionPath)):
+                editorVersionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
+                if(not os.path.exists(editorVersionPath)):
                     print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
                     continue
-                with open(versionPath) as versionPathFile:
+                with open(editorVersionPath) as versionPathFile:
                     firstline = versionPathFile.readline().rstrip()
-                version = firstline.split(" ")[1]
+                editorVersion = firstline.split(" ")[1]
 
                 unityPath = None
                 for unityEditorFolder in unityEditorsFolderList:
-                    tryUnityPath = os.path.join(unityEditorFolder, version, r"Editor\Unity.exe")
+                    tryUnityPath = os.path.join(unityEditorFolder, editorVersion, r"Editor\Unity.exe")
                     if(os.path.exists(tryUnityPath)):
                         unityPath = tryUnityPath
                         break
                 
-                self.addProjectToList(projectFolderName, description, iconPath, projectPath, unityPath)
+                ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
 
+
+    def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
+        item.data(0, QtCore.Qt.UserRole).openProject()
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
-
         self.addProjectsToList()
-        spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.projectsContentsLayout.addItem(spacer)
-
+        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
+        self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
         self.testButton.clicked.connect(lambda: self.speak())
-        #self.openButton.clicked.connect(lambda: OpenUnityProject())
 
 
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-ui = UiImplement()
-ui.setupUi(MainWindow)
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = UiImplement()
+    ui.setupUi(MainWindow)
 
-MainWindow.show()
-sys.exit(app.exec_())
+    MainWindow.show()
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
