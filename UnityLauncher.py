@@ -46,19 +46,19 @@ class ProjectData:
             return
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
         
-    def __init__(self, parent: QtWidgets.QTreeWidget, name: str, description: str, iconPath: str, projectPath: str, editorVersion: str, unityPath: str):
+    def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
+        self.iconPath = iconPath
         self.name = name
         self.description = description
-        self.iconPath = iconPath
-        self.projectPath = projectPath
         self.editorVersion = editorVersion
         self.unityPath = unityPath
+        self.projectPath = projectPath
 
         self.rowWidget = CustomSortTreeWidgetItem(parent)
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
 
         ####ICON#### #TODO make scale correctly
-        self.iconLabel = QtWidgets.QLabel(parent)
+        self.iconLabel = QtWidgets.QLabel(self.rowWidget)
         # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         # sizePolicy.setHorizontalStretch(0)
         # sizePolicy.setVerticalStretch(0)
@@ -190,7 +190,7 @@ class UiImplement(Ui_MainWindow):
                         unityPath = tryUnityPath
                         break
                 
-                ProjectData(self.projectTree, projectFolderName, description, iconPath, projectPath, editorVersion, unityPath)
+                ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
 
 
     def openProjectClick(self, item: QtWidgets.QTreeWidgetItem):
