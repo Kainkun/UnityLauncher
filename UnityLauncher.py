@@ -195,12 +195,9 @@ class UiImplement(Ui_MainWindow):
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
-
         self.addProjectsToList()
-        
         self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
         self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
-
         self.testButton.clicked.connect(lambda: self.speak())
 
 
