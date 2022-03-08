@@ -1,1 +1,1 @@
-C:\Other\Unity\Editors
+C:\Program Files\Unity\Hub\Editor

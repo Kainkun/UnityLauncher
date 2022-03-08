@@ -6,6 +6,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 import sys
+import subprocess
 from UnityLauncherUI import Ui_MainWindow
 
 
@@ -20,9 +21,10 @@ class ProjectData:
             print("Could not find valid unity editor path")
             return
 
-        command = r'Start {0} -projectPath {1}'.format(self.unityPath, self.projectPath)
-        print(command)
-        os.system(command)
+        subprocess.run([self.unityPath, '-projectPath', self.projectPath])
+        # command = r'"{0}" -projectPath "{1}"'.format(self.unityPath, self.projectPath)
+        # print(command)
+        # os.system(command)
         
     def __init__(self, parent: QtWidgets.QWidget, layout: QtWidgets.QLayout, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
         self.title = title
