@@ -66,7 +66,6 @@ class ProjectData:
         # self.iconLabel.setSizePolicy(sizePolicy)
         self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
         self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
-        self.iconLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         if(iconPath == None):
             self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
             iconPath = ""
