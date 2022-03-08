@@ -1,8 +1,6 @@
 import os
 import sys
 
-from cv2 import FarnebackOpticalFlow
-
 if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
     applicationPath = os.path.dirname(sys.executable)
 else:
@@ -14,6 +12,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 import subprocess
+import time
 from UnityLauncherUI import Ui_MainWindow
 
 
@@ -22,24 +21,21 @@ class ProjectData:
         if(self.unityPath == None):
             print("Could not find valid unity editor path")
             return
-
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
-        #command = r'Start {0} -projectPath {1}'.format(self.unityPath, self.projectPath)
-        #print(command)
-        #os.system(command)
         
-    def __init__(self, parent: QtWidgets.QTreeWidget, title: str, description: str, iconPath: str, projectPath: str, unityPath: str):
-        self.title = title
+    def __init__(self, parent: QtWidgets.QTreeWidget, name: str, description: str, iconPath: str, projectPath: str, editorVersion: str, unityPath: str):
+        self.name = name
         self.description = description
         self.iconPath = iconPath
         self.projectPath = projectPath
+        self.editorVersion = editorVersion
         self.unityPath = unityPath
 
-        self.descriptionLabel = QtWidgets.QLabel(parent)
-        self.descriptionLabel.setObjectName("description")
-        self.descriptionLabel.setWordWrap(True)
-        self.descriptionLabel.setAutoFillBackground(True)
-        self.descriptionLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.rowWidget = QtWidgets.QTreeWidgetItem(parent)
+        self.rowWidget.setData(0, 0, self)
+        parent.addTopLevelItem(self.rowWidget)
+
+        ####ICON#### #TODO make scale correctly
         self.iconLabel = QtWidgets.QLabel(parent)
         # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         # sizePolicy.setHorizontalStretch(0)
@@ -48,7 +44,6 @@ class ProjectData:
         # self.iconLabel.setSizePolicy(sizePolicy)
         self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
         self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
-        self.iconLabel.setText("")
         self.iconLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         if(iconPath == None):
             self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
@@ -56,29 +51,74 @@ class ProjectData:
             self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
         self.iconLabel.setScaledContents(True)
         self.iconLabel.setObjectName("icon")
-        self.titleLabel = QtWidgets.QLabel(parent)
-        self.titleLabel.setObjectName("title")
-        self.titleLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        self.descriptionLabel.setText(description)
-        self.titleLabel.setText(title)
+        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
+        self.rowWidget.setText(0, iconPath)
+        self.rowWidget.setForeground(0, QtGui.QColor(0,0,0,0))
 
-        self.item = QtWidgets.QTreeWidgetItem(parent)
-        self.item.setData(0, 0, self)
 
-        parent.setItemWidget(self.item, 0, self.iconLabel)
-        self.item.setText(0, iconPath)
-        self.item.setForeground(0, QtGui.QColor(0,0,0,0))
+        ####NAME####
+        self.rowWidget.setText(1, name)
 
-        parent.setItemWidget(self.item, 1, self.titleLabel)
-        self.item.setText(1, title)
-        self.item.setForeground(1, QtGui.QColor(0,0,0,0))
 
-        parent.setItemWidget(self.item, 2, self.descriptionLabel)
-        self.item.setText(2, description)
-        self.item.setForeground(2, QtGui.QColor(0,0,0,0))
+        ####DESCRIPTION####
+        self.rowWidget.setText(2, description)
 
-        parent.addTopLevelItem(self.item)
+
+        ####MODIFIED####
+        lastModifiedEpic = os.path.getmtime(self.projectPath)
+        secondsSinceModified = (time.time() - lastModifiedEpic)
+        timeSinceModifiedString = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(secondsSinceModified))
+
+        minutes = secondsSinceModified/60
+        hours = minutes/60
+        days = hours/24
+        months = days/30
+        years = days/365
+
+        if(years >= 1):
+            timeSinceModifiedDisplay = str(round(years, 1))  + " years ago"
+        elif(months >= 1):
+            if(round(months) == 1):
+                timeSinceModifiedDisplay = "a month ago"
+            else:
+                timeSinceModifiedDisplay = str(round(months))  + " months ago"
+        elif(days >= 1):
+            if(round(days) == 1):
+                timeSinceModifiedDisplay = "a day ago"
+            else:
+                timeSinceModifiedDisplay = str(round(days))  + " days ago"
+        elif(hours >= 1):
+            if(round(hours) == 1):
+                timeSinceModifiedDisplay = "an hour ago"
+            else:
+                timeSinceModifiedDisplay = str(round(hours))  + " hours ago"
+        elif(minutes >= 1):
+            if(round(minutes) == 1):
+                timeSinceModifiedDisplay = "a minute ago"
+            else:
+                timeSinceModifiedDisplay = str(round(minutes))  + " minutes ago"
+        else:
+            if(round(secondsSinceModified) == 1):
+                timeSinceModifiedDisplay = "a second ago"
+            else:
+                timeSinceModifiedDisplay = str(round(secondsSinceModified)) + " seconds ago"
+
+        self.lastModifiedLabel = QtWidgets.QLabel(parent)
+        self.lastModifiedLabel.setObjectName("modified")
+        self.lastModifiedLabel.setWordWrap(True)
+        self.lastModifiedLabel.setAutoFillBackground(True)
+        self.lastModifiedLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.lastModifiedLabel.setText(timeSinceModifiedDisplay)
+
+        parent.setItemWidget(self.rowWidget, 3, self.lastModifiedLabel)
+        self.rowWidget.setText(3, timeSinceModifiedString)
+        self.rowWidget.setForeground(3, QtGui.QColor(0,0,0,0))
+
+
+        ####EDITOR VERSION####
+        self.rowWidget.setText(4, self.editorVersion)
+
 
 class UiImplement(Ui_MainWindow):
     def __init__(self):
@@ -120,22 +160,22 @@ class UiImplement(Ui_MainWindow):
                 if(not os.path.exists(iconPath)):
                     iconPath = None
 
-                versionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
-                if(not os.path.exists(versionPath)):
+                editorVersionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
+                if(not os.path.exists(editorVersionPath)):
                     print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
                     continue
-                with open(versionPath) as versionPathFile:
+                with open(editorVersionPath) as versionPathFile:
                     firstline = versionPathFile.readline().rstrip()
-                version = firstline.split(" ")[1]
+                editorVersion = firstline.split(" ")[1]
 
                 unityPath = None
                 for unityEditorFolder in unityEditorsFolderList:
-                    tryUnityPath = os.path.join(unityEditorFolder, version, r"Editor\Unity.exe")
+                    tryUnityPath = os.path.join(unityEditorFolder, editorVersion, r"Editor\Unity.exe")
                     if(os.path.exists(tryUnityPath)):
                         unityPath = tryUnityPath
                         break
                 
-                ProjectData(self.projectTree, projectFolderName, description, iconPath, projectPath, unityPath)
+                ProjectData(self.projectTree, projectFolderName, description, iconPath, projectPath, editorVersion, unityPath)
 
 
     def openProjectClick(self, item: QtWidgets.QTreeWidgetItem):
@@ -153,12 +193,14 @@ class UiImplement(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
 
+        #self.projectTree.setStyleSheet("color: rgba(255,0,0,255)")
+
         self.addProjectsToList()
         #self.projectTree.sortItems(0, QtCore.Qt.SortOrder.DescendingOrder)
         self.projectTree.setMouseTracking(True)
         #self.projectTree.itemEntered.connect(lambda item: self.highlight(item))
         #self.projectTree.mouseMoveEvent = lambda event: self.mouseMouse(event)
-        self.projectTree.itemClicked.connect(lambda item: self.openProjectClick(item))
+        self.projectTree.itemDoubleClicked.connect(lambda item: self.openProjectClick(item))
 
         self.testButton.clicked.connect(lambda: self.speak())
         #self.openButton.clicked.connect(lambda: OpenUnityProject())
