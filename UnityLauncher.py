@@ -58,7 +58,7 @@ class ProjectData:
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
 
         ####ICON#### #TODO make scale correctly
-        self.iconLabel = QtWidgets.QLabel(self.rowWidget)
+        self.iconLabel = QtWidgets.QLabel(parent)
         # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         # sizePolicy.setHorizontalStretch(0)
         # sizePolicy.setVerticalStretch(0)
@@ -136,9 +136,6 @@ class ProjectData:
 
 
 class UiImplement(Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-
     def speak(self):
         self.titleLabel.setText("bazinga")
 
@@ -193,17 +190,8 @@ class UiImplement(Ui_MainWindow):
                 ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
 
 
-    def openProjectClick(self, item: QtWidgets.QTreeWidgetItem):
+    def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         item.data(0, QtCore.Qt.UserRole).openProject()
-    
-    def highlight(self, item: QtWidgets.QTreeWidgetItem):
-        print("enter")
-        widget = self.projectTree.itemWidget(item)
-        widget.setStyleSheet("background-color: rgb(255,0,0);")
-
-    def mouseMouse(self, event: QtGui.QMouseEvent):
-        widget = self.projectTree.itemWidget(self.projectTree.itemAt(event.pos()))
-        widget.setStyleSheet("background-color: rgb(255,0,0);")
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -211,15 +199,19 @@ class UiImplement(Ui_MainWindow):
         self.addProjectsToList()
         
         self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
-        self.projectTree.itemClicked.connect(lambda item: self.openProjectClick(item))
+        self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
 
         self.testButton.clicked.connect(lambda: self.speak())
 
 
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-ui = UiImplement()
-ui.setupUi(MainWindow)
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = UiImplement()
+    ui.setupUi(MainWindow)
 
-MainWindow.show()
-sys.exit(app.exec_())
+    MainWindow.show()
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
