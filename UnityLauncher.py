@@ -15,6 +15,29 @@ import subprocess
 import time
 from UnityLauncherUI import Ui_MainWindow
 
+class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
+    def __lt__( self, other ):
+        if ( not isinstance(other, CustomSortTreeWidgetItem) ):
+            return super(CustomSortTreeWidgetItem, self).__lt__(other)
+
+        tree = self.treeWidget()
+        if ( not tree ):
+            column = 0
+        else:
+            column = tree.sortColumn()
+
+        return self.sortData(column) < other.sortData(column)
+
+    def __init__( self, *args ):
+        super(CustomSortTreeWidgetItem, self).__init__(*args)
+        self._sortData = {}
+
+    def sortData( self, column ):
+        return self._sortData.get(column, self.text(column))
+
+    def setSortData( self, column, data ):
+        self._sortData[column] = data
+
 
 class ProjectData:
     def openProject(self):
@@ -31,9 +54,8 @@ class ProjectData:
         self.editorVersion = editorVersion
         self.unityPath = unityPath
 
-        self.rowWidget = QtWidgets.QTreeWidgetItem(parent)
-        self.rowWidget.setData(0, 0, self)
-        parent.addTopLevelItem(self.rowWidget)
+        self.rowWidget = CustomSortTreeWidgetItem(parent)
+        self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
 
         ####ICON#### #TODO make scale correctly
         self.iconLabel = QtWidgets.QLabel(parent)
@@ -47,14 +69,14 @@ class ProjectData:
         self.iconLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         if(iconPath == None):
             self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
+            iconPath = ""
         else:
             self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
         self.iconLabel.setScaledContents(True)
         self.iconLabel.setObjectName("icon")
 
         parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
-        self.rowWidget.setText(0, iconPath)
-        self.rowWidget.setForeground(0, QtGui.QColor(0,0,0,0))
+        self.rowWidget.setSortData(0, iconPath)
 
 
         ####NAME####
@@ -68,7 +90,6 @@ class ProjectData:
         ####MODIFIED####
         lastModifiedEpic = os.path.getmtime(self.projectPath)
         secondsSinceModified = (time.time() - lastModifiedEpic)
-        timeSinceModifiedString = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(secondsSinceModified))
 
         minutes = secondsSinceModified/60
         hours = minutes/60
@@ -104,20 +125,15 @@ class ProjectData:
             else:
                 timeSinceModifiedDisplay = str(round(secondsSinceModified)) + " seconds ago"
 
-        self.lastModifiedLabel = QtWidgets.QLabel(parent)
-        self.lastModifiedLabel.setObjectName("modified")
-        self.lastModifiedLabel.setWordWrap(True)
-        self.lastModifiedLabel.setAutoFillBackground(True)
-        self.lastModifiedLabel.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.lastModifiedLabel.setText(timeSinceModifiedDisplay)
-
-        parent.setItemWidget(self.rowWidget, 3, self.lastModifiedLabel)
-        self.rowWidget.setText(3, timeSinceModifiedString)
-        self.rowWidget.setForeground(3, QtGui.QColor(0,0,0,0))
+        self.rowWidget.setText(3, timeSinceModifiedDisplay)
+        self.rowWidget.setSortData(3, secondsSinceModified)
 
 
         ####EDITOR VERSION####
         self.rowWidget.setText(4, self.editorVersion)
+
+
+        parent.addTopLevelItem(self.rowWidget)
 
 
 class UiImplement(Ui_MainWindow):
@@ -179,7 +195,7 @@ class UiImplement(Ui_MainWindow):
 
 
     def openProjectClick(self, item: QtWidgets.QTreeWidgetItem):
-        item.data(0, 0).openProject()
+        item.data(0, QtCore.Qt.UserRole).openProject()
     
     def highlight(self, item: QtWidgets.QTreeWidgetItem):
         print("enter")
@@ -193,17 +209,12 @@ class UiImplement(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
 
-        #self.projectTree.setStyleSheet("color: rgba(255,0,0,255)")
-
         self.addProjectsToList()
-        #self.projectTree.sortItems(0, QtCore.Qt.SortOrder.DescendingOrder)
-        self.projectTree.setMouseTracking(True)
-        #self.projectTree.itemEntered.connect(lambda item: self.highlight(item))
-        #self.projectTree.mouseMoveEvent = lambda event: self.mouseMouse(event)
-        self.projectTree.itemDoubleClicked.connect(lambda item: self.openProjectClick(item))
+        
+        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
+        self.projectTree.itemClicked.connect(lambda item: self.openProjectClick(item))
 
         self.testButton.clicked.connect(lambda: self.speak())
-        #self.openButton.clicked.connect(lambda: OpenUnityProject())
 
 
 app = QtWidgets.QApplication(sys.argv)
