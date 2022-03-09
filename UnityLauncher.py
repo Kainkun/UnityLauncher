@@ -4,7 +4,7 @@ import sys
 if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
     applicationPath = os.path.dirname(sys.executable)
 else:
-    os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
+    os.system("pyuic5 -x UI/UnityLauncher.ui -o Generated/UnityLauncherGenerated.py")
     #os.system("pyrcc5 resource.qrc -o resource_rc.py")
     applicationPath = os.path.abspath(".")
 
@@ -13,7 +13,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 import subprocess
 import time
-from UnityLauncherUI import Ui_MainWindow
+from Generated.UnityLauncherGenerated import Ui_MainWindow
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     def __lt__( self, other ):

@@ -3,8 +3,8 @@ import sys
 import typing
 
 # Convert our UI design into python code.
-os.system("pyuic5 -x ui/FolderList.ui -o src/Generated/FolderListGenerated.py")
-os.system("pyuic5 -x ui/Settings.ui -o src/Generated/SettingsGenerated.py")
+os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
+os.system("pyuic5 -x UI/Settings.ui -o Generated/SettingsGenerated.py")
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
