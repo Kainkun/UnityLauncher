@@ -59,27 +59,6 @@ class ProjectData:
         self.rowWidget = CustomSortTreeWidgetItem(parent)
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
 
-        ####ICON#### #TODO make scale correctly
-        self.iconLabel = QtWidgets.QLabel(parent)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.iconLabel.sizePolicy().hasWidthForHeight())
-        # self.iconLabel.setSizePolicy(sizePolicy)
-        self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
-        self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
-        if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
-            iconPath = ""
-        else:
-            self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
-        self.iconLabel.setScaledContents(True)
-        self.iconLabel.setObjectName("icon")
-
-        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
-        self.rowWidget.setSortData(0, iconPath)
-
-
         ####NAME####
         self.rowWidget.setText(1, name)
 
@@ -133,6 +112,29 @@ class ProjectData:
         ####EDITOR VERSION####
         self.rowWidget.setText(4, self.editorVersion)
 
+        ####ICON#### #TODO make scale correctly
+        self.iconLabel = QtWidgets.QLabel(parent)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHeightForWidth(self.iconLabel.sizePolicy().hasWidthForHeight())
+        # self.iconLabel.setSizePolicy(sizePolicy)
+        self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
+        self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
+        if(iconPath == None):
+            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
+            iconPath = ""
+        else:
+            self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
+        self.iconLabel.setScaledContents(True)
+        self.iconLabel.setObjectName("icon")
+
+        # TODO: something really weird happens with the execution order involving this line of code below (135).
+        # TODO: for some reason, it tries to start sorting when called, causing some invalid comparisons and an exception if everything else hasn't been set up.
+        # TODO: Executing it after everything else has been initialized seems to fix the problem.
+        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
+        
+        self.rowWidget.setSortData(0, iconPath)
 
         parent.addTopLevelItem(self.rowWidget)
 
@@ -202,7 +204,6 @@ class UiImplement(Ui_MainWindow):
         # After we close the settings, reload all of the projects.
         self.projectTree.clear()
         self.addProjectsToList()
-        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
         
 
 def main():
