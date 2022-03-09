@@ -3,69 +3,89 @@ import sys
 import json
 import typing
 
+from Config import Config
+from FolderList import FolderList
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
-
 from Generated.SettingsGenerated import Ui_SettingsDialog
-from Generated.FolderListGenerated import Ui_FolderListWidget
-from FolderList import FolderList
 
 # TODO: clean up code
-# TODO: double check that executable build works... !!! fixing config creation will solve this !!!
 
 class Settings(QDialog):
+    """
+        Allows the user to change various configuration options relevent to the UnityLauncher.
+
+        - Instance Variables:
+            - projectFolderUi: FolderList
+            - editorFolderUi: FolderList
+            - config: Config
+
+        - Notes:
+            - Interfaces with the config.json file to serialize and de-serialize the selected folders, so that the system remembers your selections.
+    """
 
     def __init__(self, 
             parent: typing.Optional[QWidget] = None,
             flags: typing.Union[QtCore.Qt.WindowFlags, QtCore.Qt.WindowType] = QtCore.Qt.WindowFlags()
     ) -> None:
+        """
+            Allows the user to change various configuration options relevent to the UnityLauncher.
 
-        # Convert our UI design into python code.
-        os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
-        os.system("pyuic5 -x UI/Settings.ui -o Generated/SettingsGenerated.py")
+            - Inputs: 
+                - parent - An optional QWidget that this object will be attached to on creation.
+                - flags - Settings that can be used to customize what kind of QWidget this is: https://doc.qt.io/qt-5/qt.html#WindowType-enum
+
+            - Notes:
+                - Automatically converts relevent .ui files during construction to ensure it is up-to-date.
+        """
 
         super().__init__(parent, flags)
+
+        if not os.path.basename(sys.executable) == "UnityLauncher.exe":
+            os.system("pyuic5 -x UI/Settings.ui -o Generated/SettingsGenerated.py")
+
+        self.config = Config()
+
         self.__setupUI()
         self.__setupEvents()
 
     def __setupUI(self) -> None:
 
+        """ Constructs this widget from a pre-generated designer file, and populate it with relevent data from the config.json. """
+
         ui = Ui_SettingsDialog()
         ui.setupUi(self)
-
-        # TODO: maybe move config / serialization code to its own Config class (for cleaner code)
-        # TODO: gracefully handle creation of the config.json file if it doesn't exist
-
-        with open("config.json") as configFile:
-            self.settingsData = json.load(configFile)
 
         self.projectFolderUi = self.__setupSearchFolder(title = "Project Search Folders", baseWidget = ui.ProjectFolderList)
         self.editorFolderUi = self.__setupSearchFolder(title = "Editor Search Folders", baseWidget = ui.EditorFolderList)
 
-        self.projectFolderUi.setContents(self.settingsData["ProjectFolders"])
-        self.editorFolderUi.setContents(self.settingsData["EditorFolders"])
+        self.projectFolderUi.setContents(self.config.getProjectFolders())
+        self.editorFolderUi.setContents(self.config.getEditorFolders())
 
-    def __setupSearchFolder(self, 
-            baseWidget: QWidget,
-            title: str = "Search Folder"
-    ) -> FolderList:
+    def __setupSearchFolder(self, baseWidget: QWidget, title: str = "Search Folder") -> FolderList:
 
         folderWidget = FolderList(base = baseWidget)
-        folderWidget.ui().GroupProjectFolders.setTitle(title)
+        folderWidget.getUi().GroupProjectFolders.setTitle(title)
         return folderWidget
 
     def __setupEvents(self) -> None:
-        self.projectFolderUi.ui().ButtonAddFolder.clicked.connect(lambda: self.__updateConfig())
-        self.projectFolderUi.ui().ButtonRemoveFolder.clicked.connect(lambda: self.__updateConfig())
-        self.editorFolderUi.ui().ButtonAddFolder.clicked.connect(lambda: self.__updateConfig())
-        self.editorFolderUi.ui().ButtonRemoveFolder.clicked.connect(lambda: self.__updateConfig())
+        projectFolderUi = self.projectFolderUi.getUi()
+        editorFolderUi = self.editorFolderUi.getUi()
+
+        updateConfig = lambda: self.__updateConfig()
+
+        editorFolderUi.ButtonAddFolder.clicked.connect(updateConfig)
+        projectFolderUi.ButtonAddFolder.clicked.connect(updateConfig)
+        editorFolderUi.ButtonRemoveFolder.clicked.connect(updateConfig)
+        projectFolderUi.ButtonRemoveFolder.clicked.connect(updateConfig)
 
     def __updateConfig(self) -> None:
-        self.settingsData["ProjectFolders"] = self.projectFolderUi.getContents()
-        self.settingsData["EditorFolders"] = self.editorFolderUi.getContents()
 
-        with open("config.json", mode = "w+") as config:
-            json.dump(self.settingsData, config, indent=4, sort_keys=True)
+        config = self.config
+
+        config.setProjectFolders(self.projectFolderUi.getContents())
+        config.setEditorFolders(self.editorFolderUi.getContents())
+        config.writeChanges()
         
 if __name__ == "__main__":
 

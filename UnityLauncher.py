@@ -203,7 +203,7 @@ class UiImplement(Ui_MainWindow):
 
     def __openSettings(self):
         settings = Settings(self.centralwidget)
-        settings.show()
+        settings.exec()
         
 
 def main():

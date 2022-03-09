@@ -18,7 +18,6 @@ class FolderList(QWidget):
 
         Notes:
         - Makes heavy use of MultiFileDialog.py to present the File Selection Dialog.
-        - Interfaces with the config.json file to serialize and de-serialize the selected folders, so that the system remembers your selections.
     """
 
     def getContents(self) -> typing.List[str]:
@@ -70,7 +69,8 @@ class FolderList(QWidget):
 
         super().__init__(parent, flags)
 
-        os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
+        if not os.path.basename(sys.executable) == "UnityLauncher.exe":
+            os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
 
         self.__setupUI(base)
         self.__setupEvents()
@@ -88,9 +88,9 @@ class FolderList(QWidget):
 
         ui = self.getUi()
 
-        ui.FolderList.itemSelectionChanged.connect(lambda: self.__handleSelectionChange(ui))
-        ui.ButtonRemoveFolder.clicked.connect(lambda: self.__removeFolder(ui))
-        ui.ButtonAddFolder.clicked.connect(lambda: self.__addFolder(ui))
+        ui.FolderList.itemSelectionChanged.connect(lambda: self.__handleSelectionChange())
+        ui.ButtonRemoveFolder.clicked.connect(lambda: self.__removeFolder())
+        ui.ButtonAddFolder.clicked.connect(lambda: self.__addFolder())
 
     def __handleSelectionChange(self):
 
