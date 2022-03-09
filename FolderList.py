@@ -7,6 +7,21 @@ from PyQt5.QtWidgets import QWidget, QFileDialog, QListView, QAbstractItemView, 
 from Generated.FolderListGenerated import Ui_FolderListWidget
 
 class FolderList(QWidget):
+    def getContents(self) -> typing.List[str]:
+        folderList = self.ui().FolderList
+        result: typing.List[str] = []
+
+        for index in range(folderList.count()):
+            result.append(folderList.item(index).text())
+
+        return result
+
+    def setContents(self, contents: typing.List[str]) -> None:
+        folderList = self.ui().FolderList
+        
+        for item in contents:
+            folderList.addItem(item)
+
     def ui(self) -> Ui_FolderListWidget:
         return self.__ui
     
