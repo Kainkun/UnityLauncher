@@ -15,6 +15,7 @@ import subprocess
 import time
 from Generated.UnityLauncherGenerated import Ui_MainWindow
 from Settings import Settings
+from Config import Config
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     def __lt__( self, other ):
@@ -141,16 +142,9 @@ class UiImplement(Ui_MainWindow):
         self.titleLabel.setText("bazinga")
 
     def addProjectsToList(self):
-        with open(os.path.join(applicationPath, r'Config\UnityProjectsFolders.txt')) as unityProjectsConfig:
-            projectsFolderList = unityProjectsConfig.readlines()
-            for i in range(len(projectsFolderList)):
-                projectsFolderList[i] = projectsFolderList[i].replace("/", "\\").rstrip()
-        with open(os.path.join(applicationPath, r'Config\UnityEditorsFolders.txt')) as unityEditorsConfig:
-            unityEditorsFolderList = unityEditorsConfig.readlines()
-            for i in range(len(unityEditorsFolderList)):
-                unityEditorsFolderList[i] = unityEditorsFolderList[i].replace("/", "\\").rstrip()
+        config = Config()
 
-        for projectsFolderPath in projectsFolderList:
+        for projectsFolderPath in config.getProjectFolders():
             if(not os.path.exists(projectsFolderPath)):
                 print('Error: Projects Folder "{0}" Does Not Exist'.format(projectsFolderPath))
                 continue
@@ -182,7 +176,7 @@ class UiImplement(Ui_MainWindow):
                 editorVersion = firstline.split(" ")[1]
 
                 unityPath = None
-                for unityEditorFolder in unityEditorsFolderList:
+                for unityEditorFolder in config.getEditorFolders():
                     tryUnityPath = os.path.join(unityEditorFolder, editorVersion, r"Editor\Unity.exe")
                     if(os.path.exists(tryUnityPath)):
                         unityPath = tryUnityPath
@@ -204,6 +198,11 @@ class UiImplement(Ui_MainWindow):
     def __openSettings(self):
         settings = Settings(self.centralwidget)
         settings.exec()
+        
+        # After we close the settings, reload all of the projects.
+        self.projectTree.clear()
+        self.addProjectsToList()
+        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
         
 
 def main():
