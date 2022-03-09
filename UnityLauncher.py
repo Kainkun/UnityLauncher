@@ -11,13 +11,8 @@ else:
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-<<<<<<< HEAD
-import sys
-import subprocess
-=======
 import subprocess
 import time
->>>>>>> b2e20cd425bbc8b22b1e820d156bd2b4bf940056
 from UnityLauncherUI import Ui_MainWindow
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
@@ -49,15 +44,7 @@ class ProjectData:
         if(self.unityPath == None):
             print("Could not find valid unity editor path")
             return
-<<<<<<< HEAD
-
-        subprocess.run([self.unityPath, '-projectPath', self.projectPath])
-        # command = r'"{0}" -projectPath "{1}"'.format(self.unityPath, self.projectPath)
-        # print(command)
-        # os.system(command)
-=======
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
->>>>>>> b2e20cd425bbc8b22b1e820d156bd2b4bf940056
         
     def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
         self.iconPath = iconPath
@@ -201,7 +188,6 @@ class UiImplement(Ui_MainWindow):
                         break
                 
                 ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
-
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         item.data(0, QtCore.Qt.UserRole).openProject()
