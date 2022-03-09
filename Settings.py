@@ -11,7 +11,7 @@ from Generated.FolderListGenerated import Ui_FolderListWidget
 from FolderList import FolderList
 
 # TODO: clean up code
-# TODO: double check that executable build works...
+# TODO: double check that executable build works... !!! fixing config creation will solve this !!!
 
 class Settings(QDialog):
 
@@ -67,8 +67,10 @@ class Settings(QDialog):
         with open("config.json", mode = "w+") as config:
             json.dump(self.settingsData, config, indent=4, sort_keys=True)
         
-# If you run this file on its own, show the settings for debugging.
 if __name__ == "__main__":
+
+    # If you run this file on its own, show the settings for debugging.
+
     application = QtWidgets.QApplication(sys.argv)
 
     settingsDialog = Settings()
