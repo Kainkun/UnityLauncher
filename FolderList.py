@@ -6,6 +6,9 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QFileDialog, QListView, QAbstractItemView, QTreeView
 from Generated.FolderListGenerated import Ui_FolderListWidget
 
+# TODO: graceful exit when cancelling out of a file selection, instead of crashing :(
+# TODO: clean up code
+
 class FolderList(QWidget):
     def getContents(self) -> typing.List[str]:
         folderList = self.ui().FolderList

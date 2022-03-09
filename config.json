@@ -1,4 +1,9 @@
 {
-    "EditorFolders": [],
-    "ProjectFolders": []
+    "EditorFolders": [
+        "C:/Program Files/Unity/Hub/Editor"
+    ],
+    "ProjectFolders": [
+        "C:/Users/Daniel/Documents/Programming/C#",
+        "C:/Users/Daniel/Documents/Programming/AGL/Games"
+    ]
 }

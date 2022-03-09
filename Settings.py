@@ -10,6 +10,8 @@ from Generated.SettingsGenerated import Ui_SettingsDialog
 from Generated.FolderListGenerated import Ui_FolderListWidget
 from FolderList import FolderList
 
+# TODO: clean up code
+# TODO: double check that executable build works...
 
 class Settings(QDialog):
 
@@ -30,6 +32,9 @@ class Settings(QDialog):
 
         ui = Ui_SettingsDialog()
         ui.setupUi(self)
+
+        # TODO: maybe move config / serialization code to its own Config class (for cleaner code)
+        # TODO: gracefully handle creation of the config.json file if it doesn't exist
 
         with open("config.json") as configFile:
             self.settingsData = json.load(configFile)
