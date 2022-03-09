@@ -34,8 +34,14 @@
       <height>81</height>
      </rect>
     </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
    </widget>
    <widget class="QPushButton" name="ButtonRemoveFolder">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>120</x>
