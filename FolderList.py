@@ -4,15 +4,29 @@ import typing
 import MultiFileDialog
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QWidget, QFileDialog, QListView, QAbstractItemView, QTreeView
+from PyQt5.QtWidgets import QWidget, QFileDialog
 from Generated.FolderListGenerated import Ui_FolderListWidget
 
-# TODO: clean up code
-
 class FolderList(QWidget):
+    """
+        A Widget that allows the user to select multiple Folders.
+
+        Functions:
+        - getContents() -> List[str]
+        - setContents(List[str]) -> None
+        - getUi() -> Ui_FolderListWidget
+
+        Notes:
+        - Makes heavy use of MultiFileDialog.py to present the File Selection Dialog.
+        - Interfaces with the config.json file to serialize and de-serialize the selected folders, so that the system remembers your selections.
+    """
+
     def getContents(self) -> typing.List[str]:
-        folderList = self.ui().FolderList
-        result: typing.List[str] = []
+        
+        """ A list of folder paths that the user has selected, as strings. """
+
+        folderList = self.getUi().FolderList
+        result = []
 
         for index in range(folderList.count()):
             result.append(folderList.item(index).text())
@@ -20,12 +34,18 @@ class FolderList(QWidget):
         return result
 
     def setContents(self, contents: typing.List[str]) -> None:
-        folderList = self.ui().FolderList
+
+        """ Updates the list of folder paths that the user has selected. """
+
+        folderList = self.getUi().FolderList
         
         for item in contents:
             folderList.addItem(item)
 
-    def ui(self) -> Ui_FolderListWidget:
+    def getUi(self) -> Ui_FolderListWidget:
+
+        """ Designer-generated user interface elements. """
+
         return self.__ui
     
     def __init__(self, 
@@ -33,37 +53,73 @@ class FolderList(QWidget):
             base: typing.Optional['QWidget'] = None,
             flags: typing.Union[QtCore.Qt.WindowFlags, QtCore.Qt.WindowType] = QtCore.Qt.WindowFlags()
     ) -> None:
+        """
+            A Widget that allows the user to select multiple Folders.
 
-        # Convert our UI design into python code.
-        os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
+            - Inputs:
+                - parent - An optional QWidget that this object will be attached to on creation.
+                - base - An optional QWidget that this object will inherit it's position from.
+                - flags - Settings that can be used to customize what kind of QWidget this is: https://doc.qt.io/qt-5/qt.html#WindowType-enum
+
+            - Outputs:
+                - None
+
+            - Notes:
+                - Automatically converts relevent .ui files during construction to ensure it is up-to-date.
+        """
 
         super().__init__(parent, flags)
+
+        os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
+
         self.__setupUI(base)
         self.__setupEvents()
 
     def __setupUI(self, base: QWidget) -> None:
+        
+        """ Applies our pre-generated design to this procedural widget. """
+
         self.__ui = Ui_FolderListWidget()
         self.__ui.setupUi(base if base != None else self)
 
     def __setupEvents(self) -> None:
-        ui = self.ui()
+
+        """ Binds important logic to the UI elements that require them. """
+
+        ui = self.getUi()
+
         ui.FolderList.itemSelectionChanged.connect(lambda: self.__handleSelectionChange(ui))
         ui.ButtonRemoveFolder.clicked.connect(lambda: self.__removeFolder(ui))
         ui.ButtonAddFolder.clicked.connect(lambda: self.__addFolder(ui))
 
-    def __handleSelectionChange(self, ui: Ui_FolderListWidget):
+    def __handleSelectionChange(self):
+
+        """ Disables or enabled the 'Remove' button if we are currently selecting anything. """
+
+        ui = self.getUi()
+
         selectedItems = ui.FolderList.selectedItems()
         ui.ButtonRemoveFolder.setEnabled(len(selectedItems) > 0)
 
-    def __addFolder(self, ui: Ui_FolderListWidget):
-        paths = MultiFileDialog.selectMultiple(QFileDialog.DirectoryOnly)
+    def __addFolder(self):
 
-        for path in paths:
+        """ Prompts the user to select a folder from their directory, and adds it to the list. """
+
+        ui = self.getUi()
+
+        for path in MultiFileDialog.selectMultiple(QFileDialog.DirectoryOnly):
             ui.FolderList.addItem(path)
 
-    def __removeFolder(self, ui: Ui_FolderListWidget):
+    def __removeFolder(self):
+
+        """ Removes the folders that are currently selected from the list. """
+
+        ui = self.getUi()
+
         folderList = ui.FolderList
         indexes = folderList.selectedIndexes()
+
+        # Note: we traverse the list in reverse so we can remove elements mid-iteration without invalidating our index.
         indexes.reverse()
 
         for index in indexes:
