@@ -48,8 +48,9 @@ class FolderList(QWidget):
         return self.__ui
     
     def __init__(self, 
-            parent: typing.Optional['QWidget'] = None, 
-            base: typing.Optional['QWidget'] = None,
+            title: str = "Folder List",
+            contents: typing.List[str] = {},
+            parent: QWidget = None, 
             flags: typing.Union[QtCore.Qt.WindowFlags, QtCore.Qt.WindowType] = QtCore.Qt.WindowFlags()
     ) -> None:
         """
@@ -72,15 +73,18 @@ class FolderList(QWidget):
         if not os.path.basename(sys.executable) == "UnityLauncher.exe":
             os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
 
-        self.__setupUI(base)
+        self.__setupUI(parent, title)
         self.__setupEvents()
 
-    def __setupUI(self, base: QWidget) -> None:
+        self.setContents(contents)
+
+    def __setupUI(self, parent: QWidget, title: str) -> None:
         
         """ Applies our pre-generated design to this procedural widget. """
 
         self.__ui = Ui_FolderListWidget()
-        self.__ui.setupUi(base if base != None else self)
+        self.__ui.setupUi(parent)
+        self.__ui.GroupProjectFolders.setTitle(title)
 
     def __setupEvents(self) -> None:
 

@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import typing
 
 from Config import Config
@@ -9,19 +8,14 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
 from Generated.SettingsGenerated import Ui_SettingsDialog
 
-# TODO: clean up code
-
 class Settings(QDialog):
     """
         Allows the user to change various configuration options relevent to the UnityLauncher.
 
         - Instance Variables:
-            - projectFolderUi: FolderList
-            - editorFolderUi: FolderList
+            - projectFolderList: FolderList
+            - editorFolderList: FolderList
             - config: Config
-
-        - Notes:
-            - Interfaces with the config.json file to serialize and de-serialize the selected folders, so that the system remembers your selections.
     """
 
     def __init__(self, 
@@ -56,21 +50,17 @@ class Settings(QDialog):
         ui = Ui_SettingsDialog()
         ui.setupUi(self)
 
-        self.projectFolderUi = self.__setupSearchFolder(title = "Project Search Folders", baseWidget = ui.ProjectFolderList)
-        self.editorFolderUi = self.__setupSearchFolder(title = "Editor Search Folders", baseWidget = ui.EditorFolderList)
+        config = self.config
 
-        self.projectFolderUi.setContents(self.config.getProjectFolders())
-        self.editorFolderUi.setContents(self.config.getEditorFolders())
-
-    def __setupSearchFolder(self, baseWidget: QWidget, title: str = "Search Folder") -> FolderList:
-
-        folderWidget = FolderList(base = baseWidget)
-        folderWidget.getUi().GroupProjectFolders.setTitle(title)
-        return folderWidget
+        self.projectFolderList = FolderList("Project Search Folders", config.getProjectFolders(), ui.ProjectFolderList)
+        self.editorFolderList = FolderList("Editor Search Folders", config.getEditorFolders(), ui.EditorFolderList)
 
     def __setupEvents(self) -> None:
-        projectFolderUi = self.projectFolderUi.getUi()
-        editorFolderUi = self.editorFolderUi.getUi()
+
+        """ Assign logic to each of the interactable elements in the Settings page. """
+
+        projectFolderUi = self.projectFolderList.getUi()
+        editorFolderUi = self.editorFolderList.getUi()
 
         updateConfig = lambda: self.__updateConfig()
 
@@ -81,10 +71,12 @@ class Settings(QDialog):
 
     def __updateConfig(self) -> None:
 
+        """ Applys all relevent changes from the settings menu to the config. """
+
         config = self.config
 
-        config.setProjectFolders(self.projectFolderUi.getContents())
-        config.setEditorFolders(self.editorFolderUi.getContents())
+        config.setProjectFolders(self.projectFolderList.getContents())
+        config.setEditorFolders(self.editorFolderList.getContents())
         config.writeChanges()
         
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ import typing
 
 class Config():
 
+    # TODO: better documentation
+
     configData: typing.Dict = {}
     configName: str = "config.json"
 
