@@ -14,6 +14,7 @@ from PyQt5 import QtCore
 import subprocess
 import time
 from Generated.UnityLauncherGenerated import Ui_MainWindow
+from Settings import Settings
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     def __lt__( self, other ):
@@ -198,7 +199,12 @@ class UiImplement(Ui_MainWindow):
         self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
         self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
         self.testButton.clicked.connect(lambda: self.speak())
+        self.SettingsButton.clicked.connect(lambda: self.__openSettings())
 
+    def __openSettings(self):
+        settings = Settings(self.centralwidget)
+        settings.show()
+        
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
