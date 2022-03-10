@@ -1,13 +1,13 @@
 import os
 import sys
 import typing
-import MultiFileDialog
 
 from PyQt5 import QtCore, QtWidgets
+from MultiFileDialog import MultiFileDialog
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from Generated.FolderListGenerated import Ui_FolderListWidget
 
-class FolderList(QWidget):
+class FolderListWidget(QWidget):
     """
         A Widget that allows the user to select multiple Folders.
 
@@ -61,9 +61,6 @@ class FolderList(QWidget):
                 - base - An optional QWidget that this object will inherit it's position from.
                 - flags - Settings that can be used to customize what kind of QWidget this is: https://doc.qt.io/qt-5/qt.html#WindowType-enum
 
-            - Outputs:
-                - None
-
             - Notes:
                 - Automatically converts relevent .ui files during construction to ensure it is up-to-date.
         """
@@ -83,7 +80,7 @@ class FolderList(QWidget):
         """ Applies our pre-generated design to this procedural widget. """
 
         self.__ui = Ui_FolderListWidget()
-        self.__ui.setupUi(parent)
+        self.__ui.setupUi(parent if parent != None else self)
         self.__ui.GroupProjectFolders.setTitle(title)
 
     def __setupEvents(self) -> None:
@@ -111,8 +108,11 @@ class FolderList(QWidget):
 
         ui = self.getUi()
 
-        for path in MultiFileDialog.selectMultiple(QFileDialog.DirectoryOnly):
-            ui.FolderList.addItem(path)
+        fileDialog = MultiFileDialog(QFileDialog.DirectoryOnly)
+
+        if fileDialog.exec():
+            for path in fileDialog.selectedFiles():
+                ui.FolderList.addItem(path)
 
     def __removeFolder(self):
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     application = QtWidgets.QApplication(sys.argv)
 
-    folderList = FolderList()
+    folderList = FolderListWidget()
     folderList.show()
 
     sys.exit(application.exec_())

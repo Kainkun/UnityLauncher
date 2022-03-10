@@ -3,14 +3,16 @@ import sys
 import typing
 
 from Config import Config
-from FolderList import FolderList
+from FolderListWidget import FolderListWidget
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
 from Generated.SettingsGenerated import Ui_SettingsDialog
 
-class Settings(QDialog):
+class SettingsDialog(QDialog):
     """
         Allows the user to change various configuration options relevent to the UnityLauncher.
+
+
 
         - Instance Variables:
             - projectFolderList: FolderList
@@ -52,8 +54,8 @@ class Settings(QDialog):
 
         config = self.config
 
-        self.projectFolderList = FolderList("Project Search Folders", config.getProjectFolders(), ui.ProjectFolderList)
-        self.editorFolderList = FolderList("Editor Search Folders", config.getEditorFolders(), ui.EditorFolderList)
+        self.projectFolderList = FolderListWidget("Project Search Folders", config.getProjectFolders(), ui.ProjectFolderList)
+        self.editorFolderList = FolderListWidget("Editor Search Folders", config.getEditorFolders(), ui.EditorFolderList)
 
     def __setupEvents(self) -> None:
 
@@ -85,7 +87,7 @@ if __name__ == "__main__":
 
     application = QtWidgets.QApplication(sys.argv)
 
-    settingsDialog = Settings()
+    settingsDialog = SettingsDialog()
     settingsDialog.show()
 
     sys.exit(application.exec_())

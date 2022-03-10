@@ -14,7 +14,7 @@ from PyQt5 import QtCore
 import subprocess
 import time
 from Generated.UnityLauncherGenerated import Ui_MainWindow
-from Settings import Settings
+from SettingsDialog import SettingsDialog
 from Config import Config
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
@@ -217,7 +217,7 @@ class UiImplement(Ui_MainWindow):
         self.SettingsButton.clicked.connect(lambda: self.__openSettings())
 
     def __openSettings(self):
-        settings = Settings(self.centralwidget)
+        settings = SettingsDialog(self.centralwidget)
         settings.exec()
         
         # After we close the settings, reload all of the projects.

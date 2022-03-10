@@ -1,40 +1,50 @@
+import sys
 import typing
 
-from PyQt5.QtWidgets import QFileDialog, QListView, QAbstractItemView, QTreeView
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFileDialog, QListView, QAbstractItemView, QTreeView, QWidget
 
-def selectMultiple(fileMode: QFileDialog.FileMode = QFileDialog.AnyFile) -> typing.List[str]:
+class MultiFileDialog(QFileDialog):
     """ 
         Prompts the user to select multiple files from their system.
 
-        - Inputs:
-            - fileMode - the types of files that should be selectable by the user. Defaults to QFileDialog.AnyFile.
-        
-        - Outputs:
-            - A list of paths to the selected files.
-
-        Code referenced from this forum post:
-        https://stackoverflow.com/questions/38252419/how-to-get-qfiledialog-to-select-and-return-multiple-folders
+        - Notes:
+            - Code referenced from this forum post: 
+            - https://stackoverflow.com/questions/38252419/how-to-get-qfiledialog-to-select-and-return-multiple-folders
     """
-    
-    file_dialog = QFileDialog()
-    file_dialog.setFileMode(fileMode)
-    file_dialog.setOption(QFileDialog.DontUseNativeDialog, True)
 
-    __setSelectionMode(file_dialog, QListView, 'listView')
-    __setSelectionMode(file_dialog, QTreeView)
+    def __init__(self,
+            fileMode: QFileDialog.FileMode = QFileDialog.AnyFile,
+            parent: typing.Optional[QWidget] = None,
+            flags: typing.Union[Qt.WindowFlags, Qt.WindowType] = Qt.WindowFlags()
+    ) -> None:
 
-    result: typing.List[str] = []
+        """ Prompts the user to select multiple files from their system. """
 
-    if file_dialog.exec():
-        result = file_dialog.selectedFiles()
+        super().__init__(parent, flags)
 
-    return result
+        self.setFileMode(fileMode)
+        self.setOption(QFileDialog.DontUseNativeDialog, True)
+        self.__setSelectionMode(QListView, 'listView')
+        self.__setSelectionMode(QTreeView)
 
-def __setSelectionMode(dialog: QFileDialog, type: type, name: str = None) -> None:
-    
-    """ Assigns the ExtendedSelection mode to a target child of a dialog. """
+    def __setSelectionMode(self, type: type, name: str = None) -> None:
+        
+        """ Assigns the ExtendedSelection mode to a target child of a dialog. """
 
-    target = dialog.findChild(type, name)
+        target = self.findChild(type, name)
 
-    if target != None:
-        target.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        if target != None:
+            target.setSelectionMode(QAbstractItemView.ExtendedSelection)
+
+if __name__ == "__main__":
+
+    # If you run this file on its own, show the folder list for debugging.
+
+    application = QtWidgets.QApplication(sys.argv)
+
+    fileDialog = MultiFileDialog(QFileDialog.DirectoryOnly)
+    fileDialog.show()
+
+    sys.exit(application.exec_())

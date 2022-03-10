@@ -6,6 +6,14 @@ class Config():
     """ 
         Handles the serialization and deserialization of persistent data for the UnityLauncher.
 
+        - Functions:
+            - setProjectFolders(List[str]) -> None
+            - setEditorFolders(List[str]) -> None
+            - getProjectFolders() -> List[str]
+            - getEditorFolders() -> List[str]
+            - writeChanges() -> None
+            - readChanges() -> None
+
         - Notes:
             - Follows the MonoState pattern: https://wiki.c2.com/?MonostatePattern, so 
             keep in mind there is hidden static state associated with this class.
