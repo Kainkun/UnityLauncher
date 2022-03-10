@@ -12,8 +12,6 @@ class SettingsDialog(QDialog):
     """
         Allows the user to change various configuration options relevent to the UnityLauncher.
 
-
-
         - Instance Variables:
             - projectFolderList: FolderList
             - editorFolderList: FolderList

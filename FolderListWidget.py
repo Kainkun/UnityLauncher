@@ -93,7 +93,7 @@ class FolderListWidget(QWidget):
         ui.ButtonRemoveFolder.clicked.connect(lambda: self.__removeFolder())
         ui.ButtonAddFolder.clicked.connect(lambda: self.__addFolder())
 
-    def __handleSelectionChange(self):
+    def __handleSelectionChange(self) -> None:
 
         """ Disables or enabled the 'Remove' button if we are currently selecting anything. """
 
@@ -102,7 +102,7 @@ class FolderListWidget(QWidget):
         selectedItems = ui.FolderList.selectedItems()
         ui.ButtonRemoveFolder.setEnabled(len(selectedItems) > 0)
 
-    def __addFolder(self):
+    def __addFolder(self) -> None:
 
         """ Prompts the user to select a folder from their directory, and adds it to the list. """
 
@@ -114,7 +114,7 @@ class FolderListWidget(QWidget):
             for path in fileDialog.selectedFiles():
                 ui.FolderList.addItem(path)
 
-    def __removeFolder(self):
+    def __removeFolder(self) -> None:
 
         """ Removes the folders that are currently selected from the list. """
 
