@@ -43,6 +43,16 @@ class Ui_MainWindow(object):
 "QTreeView::item:hover\n"
 "{\n"
 "    background: rgb(38, 38, 38);\n"
+"}\n"
+"\n"
+"QHeaderView::up-arrow\n"
+"{\n"
+"    image: url(Images/UpWhiteArrow.png);\n"
+"}\n"
+"\n"
+"QHeaderView::down-arrow\n"
+"{\n"
+"    image: url(Images/DownWhiteArrow.png);\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -81,7 +91,10 @@ class Ui_MainWindow(object):
         self.titleLabel.setObjectName("titleLabel")
         self.centralwidgetLayout.addWidget(self.titleLabel, 2, 0, 1, 1)
         self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
+        self.projectTree.setIndentation(0)
+        self.projectTree.setItemsExpandable(False)
         self.projectTree.setWordWrap(True)
+        self.projectTree.setExpandsOnDoubleClick(False)
         self.projectTree.setObjectName("projectTree")
         self.centralwidgetLayout.addWidget(self.projectTree, 4, 0, 1, 6)
         self.newProjectButton = QtWidgets.QPushButton(self.centralwidget)

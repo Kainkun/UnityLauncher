@@ -43,6 +43,16 @@ QHeaderView::section
 QTreeView::item:hover
 {
 	background: rgb(38, 38, 38);
+}
+
+QHeaderView::up-arrow
+{
+	image: url(Images/UpWhiteArrow.png);
+}
+
+QHeaderView::down-arrow
+{
+	image: url(Images/DownWhiteArrow.png);
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -122,11 +132,20 @@ QTreeView::item:hover
     </item>
     <item row="4" column="0" colspan="6">
      <widget class="QTreeWidget" name="projectTree">
+      <property name="indentation">
+       <number>0</number>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
+      </property>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
       </property>
       <column>
        <property name="text">
