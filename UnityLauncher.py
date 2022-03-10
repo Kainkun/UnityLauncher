@@ -45,6 +45,12 @@ class ProjectData:
             print("Could not find valid unity editor path")
             return
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
+
+    def setDescription(self):
+        print("set description")
+
+    def setIcon(self):
+        print("set icon")
         
     def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
         self.iconPath = iconPath
@@ -57,17 +63,12 @@ class ProjectData:
         self.rowWidget = CustomSortTreeWidgetItem(parent)
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
 
-        ####ICON#### #TODO make scale correctly
+        ####ICON####
         self.iconLabel = QtWidgets.QLabel(parent)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.iconLabel.sizePolicy().hasWidthForHeight())
-        # self.iconLabel.setSizePolicy(sizePolicy)
-        self.iconLabel.setMinimumSize(QtCore.QSize(100, 100))
-        self.iconLabel.setMaximumSize(QtCore.QSize(100, 100))
+        self.iconLabel.setMinimumSize(QtCore.QSize(150, 150))
+        self.iconLabel.setMaximumSize(QtCore.QSize(150, 150))
         if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhite.png"))
+            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhitePadded.png"))
             iconPath = ""
         else:
             self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
@@ -193,11 +194,29 @@ class UiImplement(Ui_MainWindow):
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         item.data(0, QtCore.Qt.UserRole).openProject()
 
+    def projectContextMenu(self, position: QtCore.QPoint):
+        item = self.projectTree.itemAt(position)
+        projectData = item.data(0, QtCore.Qt.UserRole)
+        print(projectData.name)
+        menu = QtWidgets.QMenu()
+        menu.addAction("Set Description", lambda: projectData.setDescription())
+        menu.addAction("Set Icon", lambda: projectData.setIcon())
+        menu.exec(self.projectTree.mapToGlobal(position))
+
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.addProjectsToList()
+        self.projectTree.setColumnWidth(0,150)
+        self.projectTree.setColumnWidth(1,200)
+        self.projectTree.setColumnWidth(2,600)
+        self.projectTree.setColumnWidth(3,200)
+        self.projectTree.setColumnWidth(4,200)
+        self.projectTree.header().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
         self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
         self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
+        self.projectTree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.projectTree.customContextMenuRequested.connect(lambda position: self.projectContextMenu(position))
+
         self.testButton.clicked.connect(lambda: self.speak())
 
 

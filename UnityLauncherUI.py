@@ -43,6 +43,16 @@ class Ui_MainWindow(object):
 "QTreeView::item:hover\n"
 "{\n"
 "    background: rgb(38, 38, 38);\n"
+"}\n"
+"\n"
+"QHeaderView::up-arrow\n"
+"{\n"
+"    image: url(Images/UpWhiteArrow.png);\n"
+"}\n"
+"\n"
+"QHeaderView::down-arrow\n"
+"{\n"
+"    image: url(Images/DownWhiteArrow.png);\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -81,7 +91,10 @@ class Ui_MainWindow(object):
         self.searchLineEdit.setObjectName("searchLineEdit")
         self.centralwidgetLayout.addWidget(self.searchLineEdit, 3, 1, 1, 2)
         self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
+        self.projectTree.setIndentation(0)
+        self.projectTree.setItemsExpandable(False)
         self.projectTree.setWordWrap(True)
+        self.projectTree.setExpandsOnDoubleClick(False)
         self.projectTree.setObjectName("projectTree")
         self.centralwidgetLayout.addWidget(self.projectTree, 4, 0, 1, 3)
         self.centralwidgetLayout.setColumnStretch(0, 4)
