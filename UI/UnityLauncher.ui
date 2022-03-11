@@ -14,8 +14,8 @@
    <string>Unity Launcher</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>Images/UnityIconBlack.png</normaloff>Images/UnityIconBlack.png</iconset>
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/Unity.ico</normaloff>:/images/Unity.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">*
@@ -47,12 +47,12 @@ QTreeView::item:hover
 
 QHeaderView::up-arrow
 {
-	image: url(Images/UpWhiteArrow.png);
+	image: url(:/images/UpWhiteArrow.png);
 }
 
 QHeaderView::down-arrow
 {
-	image: url(Images/DownWhiteArrow.png);
+	image: url(:/images/DownWhiteArrow.png);
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -75,31 +75,6 @@ QHeaderView::down-arrow
      <widget class="QLineEdit" name="searchLineEdit">
       <property name="placeholderText">
        <string>Search</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="testButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Test Button</string>
       </property>
      </widget>
     </item>
@@ -127,6 +102,31 @@ QHeaderView::down-arrow
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="testButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Test Button</string>
       </property>
      </widget>
     </item>
@@ -189,12 +189,14 @@ QHeaderView::down-arrow
      <x>0</x>
      <y>0</y>
      <width>830</width>
-     <height>22</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

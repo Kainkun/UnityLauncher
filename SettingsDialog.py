@@ -6,7 +6,7 @@ from Config import Config
 from FolderListWidget import FolderListWidget
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
-from Generated.SettingsGenerated import Ui_SettingsDialog
+from generated.SettingsGenerated import Ui_SettingsDialog
 
 class SettingsDialog(QDialog):
     """
@@ -34,9 +34,6 @@ class SettingsDialog(QDialog):
         """
 
         super().__init__(parent, flags)
-
-        if not os.path.basename(sys.executable) == "UnityLauncher.exe":
-            os.system("pyuic5 -x UI/Settings.ui -o Generated/SettingsGenerated.py")
 
         self.config = Config()
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI/UnityLauncher.ui'
+# Form implementation generated from reading ui file 'ui/UnityLauncher.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -16,7 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(830, 535)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("UI\\Images/UnityIconBlack.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/images/Unity.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("*\n"
 "{\n"
@@ -47,12 +47,12 @@ class Ui_MainWindow(object):
 "\n"
 "QHeaderView::up-arrow\n"
 "{\n"
-"    image: url(Images/UpWhiteArrow.png);\n"
+"    image: url(:/images/UpWhiteArrow.png);\n"
 "}\n"
 "\n"
 "QHeaderView::down-arrow\n"
 "{\n"
-"    image: url(Images/DownWhiteArrow.png);\n"
+"    image: url(:/images/DownWhiteArrow.png);\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -67,16 +67,6 @@ class Ui_MainWindow(object):
         self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.searchLineEdit.setObjectName("searchLineEdit")
         self.centralwidgetLayout.addWidget(self.searchLineEdit, 3, 2, 1, 4)
-        self.testButton = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.testButton.sizePolicy().hasHeightForWidth())
-        self.testButton.setSizePolicy(sizePolicy)
-        self.testButton.setMinimumSize(QtCore.QSize(150, 0))
-        self.testButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.testButton.setObjectName("testButton")
-        self.centralwidgetLayout.addWidget(self.testButton, 3, 0, 1, 1)
         self.titleLabel = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -90,6 +80,16 @@ class Ui_MainWindow(object):
         self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.titleLabel.setObjectName("titleLabel")
         self.centralwidgetLayout.addWidget(self.titleLabel, 2, 0, 1, 1)
+        self.testButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.testButton.sizePolicy().hasHeightForWidth())
+        self.testButton.setSizePolicy(sizePolicy)
+        self.testButton.setMinimumSize(QtCore.QSize(150, 0))
+        self.testButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.testButton.setObjectName("testButton")
+        self.centralwidgetLayout.addWidget(self.testButton, 3, 0, 1, 1)
         self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
         self.projectTree.setIndentation(0)
         self.projectTree.setItemsExpandable(False)
@@ -103,7 +103,7 @@ class Ui_MainWindow(object):
         self.centralwidgetLayout.setColumnStretch(0, 4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 830, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 830, 18))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -119,8 +119,8 @@ class Ui_MainWindow(object):
         self.SettingsButton.setText(_translate("MainWindow", "Settings"))
         self.openButton_5.setText(_translate("MainWindow", "Open"))
         self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
-        self.testButton.setText(_translate("MainWindow", "Test Button"))
         self.titleLabel.setText(_translate("MainWindow", "Projects"))
+        self.testButton.setText(_translate("MainWindow", "Test Button"))
         self.projectTree.setSortingEnabled(True)
         self.projectTree.headerItem().setText(0, _translate("MainWindow", "ICON"))
         self.projectTree.headerItem().setText(1, _translate("MainWindow", "NAME"))
@@ -128,6 +128,7 @@ class Ui_MainWindow(object):
         self.projectTree.headerItem().setText(3, _translate("MainWindow", "MODIFIED"))
         self.projectTree.headerItem().setText(4, _translate("MainWindow", "EDITOR VERSION"))
         self.newProjectButton.setText(_translate("MainWindow", "New Project"))
+import resources_rc
 
 
 if __name__ == "__main__":

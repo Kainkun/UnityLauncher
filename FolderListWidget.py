@@ -5,7 +5,7 @@ import typing
 from PyQt5 import QtCore, QtWidgets
 from MultiFileDialog import MultiFileDialog
 from PyQt5.QtWidgets import QWidget, QFileDialog
-from Generated.FolderListGenerated import Ui_FolderListWidget
+from generated.FolderListGenerated import Ui_FolderListWidget
 
 class FolderListWidget(QWidget):
     """
@@ -66,9 +66,6 @@ class FolderListWidget(QWidget):
         """
 
         super().__init__(parent, flags)
-
-        if not os.path.basename(sys.executable) == "UnityLauncher.exe":
-            os.system("pyuic5 -x UI/FolderList.ui -o Generated/FolderListGenerated.py")
 
         self.__setupUI(parent, title)
         self.__setupEvents()

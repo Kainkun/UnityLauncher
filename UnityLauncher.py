@@ -4,8 +4,6 @@ import sys
 if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
     applicationPath = os.path.dirname(sys.executable)
 else:
-    os.system("pyuic5 -x UI/UnityLauncher.ui -o Generated/UnityLauncherGenerated.py")
-    #os.system("pyrcc5 resource.qrc -o resource_rc.py")
     applicationPath = os.path.abspath(".")
 
 from PyQt5 import QtCore
@@ -13,7 +11,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
 from Config import Config
-from Generated.UnityLauncherGenerated import Ui_MainWindow
+from generated.UnityLauncherGenerated import Ui_MainWindow
 from ProjectData import ProjectData
 from SettingsDialog import SettingsDialog
 
