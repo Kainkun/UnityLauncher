@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UnityLauncher.ui'
+# Form implementation generated from reading ui file 'UI/UnityLauncher.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(702, 470)
+        MainWindow.resize(830, 535)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("Images/UnityIconBlack.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("UI\\Images/UnityIconBlack.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("*\n"
 "{\n"
@@ -58,12 +58,25 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.centralwidgetLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.centralwidgetLayout.setObjectName("centralwidgetLayout")
+        self.SettingsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.SettingsButton.setObjectName("SettingsButton")
+        self.centralwidgetLayout.addWidget(self.SettingsButton, 2, 4, 1, 1)
         self.openButton_5 = QtWidgets.QPushButton(self.centralwidget)
         self.openButton_5.setObjectName("openButton_5")
-        self.centralwidgetLayout.addWidget(self.openButton_5, 2, 1, 1, 1)
-        self.newProjectButton = QtWidgets.QPushButton(self.centralwidget)
-        self.newProjectButton.setObjectName("newProjectButton")
-        self.centralwidgetLayout.addWidget(self.newProjectButton, 2, 2, 1, 1)
+        self.centralwidgetLayout.addWidget(self.openButton_5, 2, 2, 1, 1)
+        self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.searchLineEdit.setObjectName("searchLineEdit")
+        self.centralwidgetLayout.addWidget(self.searchLineEdit, 3, 2, 1, 4)
+        self.testButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.testButton.sizePolicy().hasHeightForWidth())
+        self.testButton.setSizePolicy(sizePolicy)
+        self.testButton.setMinimumSize(QtCore.QSize(150, 0))
+        self.testButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.testButton.setObjectName("testButton")
+        self.centralwidgetLayout.addWidget(self.testButton, 3, 0, 1, 1)
         self.titleLabel = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -77,30 +90,20 @@ class Ui_MainWindow(object):
         self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.titleLabel.setObjectName("titleLabel")
         self.centralwidgetLayout.addWidget(self.titleLabel, 2, 0, 1, 1)
-        self.testButton = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.testButton.sizePolicy().hasHeightForWidth())
-        self.testButton.setSizePolicy(sizePolicy)
-        self.testButton.setMinimumSize(QtCore.QSize(150, 0))
-        self.testButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.testButton.setObjectName("testButton")
-        self.centralwidgetLayout.addWidget(self.testButton, 3, 0, 1, 1)
-        self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.searchLineEdit.setObjectName("searchLineEdit")
-        self.centralwidgetLayout.addWidget(self.searchLineEdit, 3, 1, 1, 2)
         self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
         self.projectTree.setIndentation(0)
         self.projectTree.setItemsExpandable(False)
         self.projectTree.setWordWrap(True)
         self.projectTree.setExpandsOnDoubleClick(False)
         self.projectTree.setObjectName("projectTree")
-        self.centralwidgetLayout.addWidget(self.projectTree, 4, 0, 1, 3)
+        self.centralwidgetLayout.addWidget(self.projectTree, 4, 0, 1, 6)
+        self.newProjectButton = QtWidgets.QPushButton(self.centralwidget)
+        self.newProjectButton.setObjectName("newProjectButton")
+        self.centralwidgetLayout.addWidget(self.newProjectButton, 2, 3, 1, 1)
         self.centralwidgetLayout.setColumnStretch(0, 4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 702, 18))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 830, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -113,17 +116,18 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Unity Launcher"))
+        self.SettingsButton.setText(_translate("MainWindow", "Settings"))
         self.openButton_5.setText(_translate("MainWindow", "Open"))
-        self.newProjectButton.setText(_translate("MainWindow", "New Project"))
-        self.titleLabel.setText(_translate("MainWindow", "Projects"))
-        self.testButton.setText(_translate("MainWindow", "Test Button"))
         self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
+        self.testButton.setText(_translate("MainWindow", "Test Button"))
+        self.titleLabel.setText(_translate("MainWindow", "Projects"))
         self.projectTree.setSortingEnabled(True)
         self.projectTree.headerItem().setText(0, _translate("MainWindow", "ICON"))
         self.projectTree.headerItem().setText(1, _translate("MainWindow", "NAME"))
         self.projectTree.headerItem().setText(2, _translate("MainWindow", "DESCRIPTION"))
         self.projectTree.headerItem().setText(3, _translate("MainWindow", "MODIFIED"))
         self.projectTree.headerItem().setText(4, _translate("MainWindow", "EDITOR VERSION"))
+        self.newProjectButton.setText(_translate("MainWindow", "New Project"))
 
 
 if __name__ == "__main__":

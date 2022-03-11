@@ -4,7 +4,7 @@ import sys
 if(os.path.basename(sys.executable) == "UnityLauncher.exe"):
     applicationPath = os.path.dirname(sys.executable)
 else:
-    os.system("pyuic5 -x UnityLauncher.ui -o UnityLauncherUI.py")
+    os.system("pyuic5 -x UI/UnityLauncher.ui -o Generated/UnityLauncherGenerated.py")
     #os.system("pyrcc5 resource.qrc -o resource_rc.py")
     applicationPath = os.path.abspath(".")
 
@@ -13,7 +13,9 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 import subprocess
 import time
-from UnityLauncherUI import Ui_MainWindow
+from Generated.UnityLauncherGenerated import Ui_MainWindow
+from SettingsDialog import SettingsDialog
+from Config import Config
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     def __lt__( self, other ):
@@ -62,22 +64,6 @@ class ProjectData:
 
         self.rowWidget = CustomSortTreeWidgetItem(parent)
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
-
-        ####ICON####
-        self.iconLabel = QtWidgets.QLabel(parent)
-        self.iconLabel.setMinimumSize(QtCore.QSize(150, 150))
-        self.iconLabel.setMaximumSize(QtCore.QSize(150, 150))
-        if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhitePadded.png"))
-            iconPath = ""
-        else:
-            self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
-        self.iconLabel.setScaledContents(True)
-        self.iconLabel.setObjectName("icon")
-
-        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
-        self.rowWidget.setSortData(0, iconPath)
-
 
         ####NAME####
         self.rowWidget.setText(1, name)
@@ -132,6 +118,24 @@ class ProjectData:
         ####EDITOR VERSION####
         self.rowWidget.setText(4, self.editorVersion)
 
+        ####ICON####
+        self.iconLabel = QtWidgets.QLabel(parent)
+        self.iconLabel.setMinimumSize(QtCore.QSize(150, 150))
+        self.iconLabel.setMaximumSize(QtCore.QSize(150, 150))
+        if(iconPath == None):
+            self.iconLabel.setPixmap(QtGui.QPixmap("Images/UnityIconWhitePadded.png"))
+            iconPath = ""
+        else:
+            self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
+        self.iconLabel.setScaledContents(True)
+        self.iconLabel.setObjectName("icon")
+
+        # TODO: something really weird happens with the execution order involving this line of code below (136).
+        # TODO: for some reason, it tries to start sorting when called, causing some invalid comparisons and an exception if everything else hasn't been set up.
+        # TODO: Executing it after everything else has been initialized seems to fix the problem.
+        parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
+
+        self.rowWidget.setSortData(0, iconPath)
 
         parent.addTopLevelItem(self.rowWidget)
 
@@ -141,16 +145,9 @@ class UiImplement(Ui_MainWindow):
         self.titleLabel.setText("bazinga")
 
     def addProjectsToList(self):
-        with open(os.path.join(applicationPath, r'Config\UnityProjectsFolders.txt')) as unityProjectsConfig:
-            projectsFolderList = unityProjectsConfig.readlines()
-            for i in range(len(projectsFolderList)):
-                projectsFolderList[i] = projectsFolderList[i].replace("/", "\\").rstrip()
-        with open(os.path.join(applicationPath, r'Config\UnityEditorsFolders.txt')) as unityEditorsConfig:
-            unityEditorsFolderList = unityEditorsConfig.readlines()
-            for i in range(len(unityEditorsFolderList)):
-                unityEditorsFolderList[i] = unityEditorsFolderList[i].replace("/", "\\").rstrip()
+        config = Config()
 
-        for projectsFolderPath in projectsFolderList:
+        for projectsFolderPath in config.getProjectFolders():
             if(not os.path.exists(projectsFolderPath)):
                 print('Error: Projects Folder "{0}" Does Not Exist'.format(projectsFolderPath))
                 continue
@@ -182,14 +179,13 @@ class UiImplement(Ui_MainWindow):
                 editorVersion = firstline.split(" ")[1]
 
                 unityPath = None
-                for unityEditorFolder in unityEditorsFolderList:
+                for unityEditorFolder in config.getEditorFolders():
                     tryUnityPath = os.path.join(unityEditorFolder, editorVersion, r"Editor\Unity.exe")
                     if(os.path.exists(tryUnityPath)):
                         unityPath = tryUnityPath
                         break
                 
                 ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
-
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         item.data(0, QtCore.Qt.UserRole).openProject()
@@ -218,7 +214,16 @@ class UiImplement(Ui_MainWindow):
         self.projectTree.customContextMenuRequested.connect(lambda position: self.projectContextMenu(position))
 
         self.testButton.clicked.connect(lambda: self.speak())
+        self.SettingsButton.clicked.connect(lambda: self.__openSettings())
 
+    def __openSettings(self):
+        settings = SettingsDialog(self.centralwidget)
+        settings.exec()
+        
+        # After we close the settings, reload all of the projects.
+        self.projectTree.clear()
+        self.addProjectsToList()
+        
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
