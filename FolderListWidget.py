@@ -108,7 +108,8 @@ class FolderListWidget(QWidget):
 
         ui = self.getUi()
 
-        fileDialog = MultiFileDialog(QFileDialog.DirectoryOnly)
+        fileDialog = QFileDialog()
+        fileDialog.setFileMode(QFileDialog.DirectoryOnly)
 
         if fileDialog.exec():
             for path in fileDialog.selectedFiles():
