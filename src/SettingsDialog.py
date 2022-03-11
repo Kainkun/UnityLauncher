@@ -2,11 +2,12 @@ import os
 import sys
 import typing
 
-from Config import Config
-from FolderListWidget import FolderListWidget
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QDialog
+
 from generated.SettingsGenerated import Ui_SettingsDialog
+from src.Config import Config
+from src.FolderListWidget import FolderListWidget
 
 class SettingsDialog(QDialog):
     """

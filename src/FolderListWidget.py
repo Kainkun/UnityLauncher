@@ -3,9 +3,10 @@ import sys
 import typing
 
 from PyQt5 import QtCore, QtWidgets
-from MultiFileDialog import MultiFileDialog
 from PyQt5.QtWidgets import QWidget, QFileDialog
+
 from generated.FolderListGenerated import Ui_FolderListWidget
+from src.MultiFileDialog import MultiFileDialog
 
 class FolderListWidget(QWidget):
     """

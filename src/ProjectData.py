@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
-from CustomSortTreeWidgetItem import CustomSortTreeWidgetItem
+from src.CustomSortTreeWidgetItem import CustomSortTreeWidgetItem
 
 class ProjectData:
     def openProject(self):

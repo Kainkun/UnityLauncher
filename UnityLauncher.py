@@ -10,10 +10,10 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
-from Config import Config
 from generated.UnityLauncherGenerated import Ui_MainWindow
-from ProjectData import ProjectData
-from SettingsDialog import SettingsDialog
+from src.Config import Config
+from src.ProjectData import ProjectData
+from src.SettingsDialog import SettingsDialog
 
 class UiImplement(Ui_MainWindow):
     def speak(self):
