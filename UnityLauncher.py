@@ -56,6 +56,9 @@ class ProjectData:
 
     def setIcon(self):
         print("set icon")
+
+    def deleteProject(self):
+        print("delete project")
         
     def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
         self.parent = parent
@@ -203,6 +206,7 @@ class UiImplement(Ui_MainWindow):
         menu = QtWidgets.QMenu()
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addAction("Set Icon", lambda: projectData.setIcon())
+        menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))
 
     def setupUi(self, MainWindow):
