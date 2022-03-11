@@ -14,7 +14,7 @@
    <string>Unity Launcher</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/images/Unity.ico</normaloff>:/images/Unity.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -196,7 +196,7 @@ QHeaderView::down-arrow
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>
