@@ -46,6 +46,9 @@ class ProjectData:
         if(self.unityPath == None):
             print("Could not find valid unity editor path")
             return
+        self.timeSinceModifiedDisplay = "Just now!"
+        self.secondsSinceModified = 0
+        self.rowWidget.setText(3, self.timeSinceModifiedDisplay)
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
 
     def setDescription(self):
@@ -55,6 +58,7 @@ class ProjectData:
         print("set icon")
         
     def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
+        self.parent = parent
         self.iconPath = iconPath
         self.name = name
         self.description = description
@@ -75,44 +79,44 @@ class ProjectData:
 
         ####MODIFIED####
         lastModifiedEpic = os.path.getmtime(self.projectPath)
-        secondsSinceModified = (time.time() - lastModifiedEpic)
+        self.secondsSinceModified = (time.time() - lastModifiedEpic)
 
-        minutes = secondsSinceModified/60
+        minutes = self.secondsSinceModified/60
         hours = minutes/60
         days = hours/24
         months = days/30
         years = days/365
 
         if(years >= 1):
-            timeSinceModifiedDisplay = str(round(years, 1))  + " years ago"
+            self.timeSinceModifiedDisplay = str(round(years, 1))  + " years ago"
         elif(months >= 1):
             if(round(months) == 1):
-                timeSinceModifiedDisplay = "a month ago"
+                self.timeSinceModifiedDisplay = "a month ago"
             else:
-                timeSinceModifiedDisplay = str(round(months))  + " months ago"
+                self.timeSinceModifiedDisplay = str(round(months))  + " months ago"
         elif(days >= 1):
             if(round(days) == 1):
-                timeSinceModifiedDisplay = "a day ago"
+                self.timeSinceModifiedDisplay = "a day ago"
             else:
-                timeSinceModifiedDisplay = str(round(days))  + " days ago"
+                self.timeSinceModifiedDisplay = str(round(days))  + " days ago"
         elif(hours >= 1):
             if(round(hours) == 1):
-                timeSinceModifiedDisplay = "an hour ago"
+                self.timeSinceModifiedDisplay = "an hour ago"
             else:
-                timeSinceModifiedDisplay = str(round(hours))  + " hours ago"
+                self.timeSinceModifiedDisplay = str(round(hours))  + " hours ago"
         elif(minutes >= 1):
             if(round(minutes) == 1):
-                timeSinceModifiedDisplay = "a minute ago"
+                self.timeSinceModifiedDisplay = "a minute ago"
             else:
-                timeSinceModifiedDisplay = str(round(minutes))  + " minutes ago"
+                self.timeSinceModifiedDisplay = str(round(minutes))  + " minutes ago"
         else:
-            if(round(secondsSinceModified) == 1):
-                timeSinceModifiedDisplay = "a second ago"
+            if(round(self.secondsSinceModified) == 1):
+                self.timeSinceModifiedDisplay = "a second ago"
             else:
-                timeSinceModifiedDisplay = str(round(secondsSinceModified)) + " seconds ago"
+                self.timeSinceModifiedDisplay = str(round(self.secondsSinceModified)) + " seconds ago"
 
-        self.rowWidget.setText(3, timeSinceModifiedDisplay)
-        self.rowWidget.setSortData(3, secondsSinceModified)
+        self.rowWidget.setText(3, self.timeSinceModifiedDisplay)
+        self.rowWidget.setSortData(3, self.secondsSinceModified)
 
 
         ####EDITOR VERSION####
@@ -192,6 +196,8 @@ class UiImplement(Ui_MainWindow):
 
     def projectContextMenu(self, position: QtCore.QPoint):
         item = self.projectTree.itemAt(position)
+        if(item == None):
+            return
         projectData = item.data(0, QtCore.Qt.UserRole)
         print(projectData.name)
         menu = QtWidgets.QMenu()
