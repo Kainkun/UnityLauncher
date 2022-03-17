@@ -56,81 +56,8 @@ QHeaderView::down-arrow
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="centralwidgetLayout" columnstretch="4,0,0,0,0,0">
-    <item row="2" column="4">
-     <widget class="QPushButton" name="SettingsButton">
-      <property name="text">
-       <string>Settings</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="openButton_5">
-      <property name="text">
-       <string>Open</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="4">
-     <widget class="QLineEdit" name="searchLineEdit">
-      <property name="placeholderText">
-       <string>Search</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="titleLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>15</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Projects</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="testButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Test Button</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="6">
+   <layout class="QGridLayout" name="centralwidgetLayout">
+    <item row="2" column="0" colspan="2">
      <widget class="QTreeWidget" name="projectTree">
       <property name="indentation">
        <number>0</number>
@@ -174,11 +101,83 @@ QHeaderView::down-arrow
       </column>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QPushButton" name="newProjectButton">
-      <property name="text">
-       <string>New Project</string>
-      </property>
+    <item row="0" column="0">
+     <widget class="QWidget" name="topWidget" native="true">
+      <layout class="QGridLayout" name="gridLayout" columnstretch="5,1,1">
+       <item row="1" column="0">
+        <widget class="QPushButton" name="testButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Test Button</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="newProjectButton">
+         <property name="text">
+          <string>New Project</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="titleLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Projects</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="SettingsButton">
+         <property name="text">
+          <string>Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="searchLineEdit">
+         <property name="placeholderText">
+          <string>Search</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

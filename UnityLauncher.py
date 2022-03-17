@@ -36,17 +36,6 @@ class UiImplement(Ui_MainWindow):
                     print('Error: Project Folder "{0}" Does Not Exist'.format(projectPath))
                     continue
 
-                descriptionFilePath = os.path.join(projectPath, "desc.txt")
-                if(os.path.exists(descriptionFilePath)):
-                    with open(descriptionFilePath) as descriptionFile:
-                        description = descriptionFile.read()
-                else:
-                    description = ""
-
-                iconPath = os.path.join(projectPath, "icon.png")
-                if(not os.path.exists(iconPath)):
-                    iconPath = None
-
                 editorVersionPath = os.path.join(projectPath, r"ProjectSettings\ProjectVersion.txt")
                 if(not os.path.exists(editorVersionPath)):
                     print('Error: ProjectVersion.txt not found for "{0}"'.format(projectFolderName))
@@ -62,7 +51,7 @@ class UiImplement(Ui_MainWindow):
                         unityPath = tryUnityPath
                         break
                 
-                ProjectData(self.projectTree, iconPath, projectFolderName, description, editorVersion, unityPath, projectPath)
+                ProjectData(self.projectTree, projectFolderName, projectPath, unityPath, editorVersion)
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         item.data(0, QtCore.Qt.UserRole).openProject()
@@ -76,6 +65,8 @@ class UiImplement(Ui_MainWindow):
         menu = QtWidgets.QMenu()
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addAction("Set Icon", lambda: projectData.setIcon())
+        menu.addAction("Show in Explorer", lambda: projectData.showInExplorer())
+        menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))
 

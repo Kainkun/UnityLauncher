@@ -1,10 +1,12 @@
 import os
+import shutil
 import subprocess
 import time
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+from send2trash import send2trash
 
 from src.CustomSortTreeWidgetItem import CustomSortTreeWidgetItem
 
@@ -19,22 +21,55 @@ class ProjectData:
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
 
     def setDescription(self):
-        print("set description")
+        dialog = QtWidgets.QInputDialog(self.parent)
+        dialog.setOptions(QtWidgets.QInputDialog.UsePlainTextEditForTextInput);
+        dialog.setWindowTitle(self.name + " Description");
+        dialog.setLabelText("Edit Description");
+        dialog.setTextValue(self.description);
+        dialog.setWindowFlag(QtCore.Qt.WindowType.WindowContextHelpButtonHint, False)
+        dialog.setInputMode(QtWidgets.QInputDialog.InputMode.TextInput)
+        dialog.setSizeGripEnabled(True)
+        dialog.resize(600,200)
+        ok = dialog.exec_()
+        text = dialog.textValue()
+        if(ok):
+            self.description = text
+            self.rowWidget.setText(2, text)
+
 
     def setIcon(self):
-        print("set icon")
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        selected = fileDialog.exec()
+        if(selected):
+            file = fileDialog.selectedFiles()[0]
+            if(self.iconExists):
+                send2trash(self.iconPath)
+            shutil.copyfile(file, self.iconPath)
+            self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
+
+    def showInExplorer(self):
+        subprocess.Popen(r'explorer /select,"{0}"'.format(self.projectPath).replace('/', '\\'))
+        
 
     def deleteProject(self):
-        print("delete project")
+        print(self.projectPath)
+        msgBox = QtWidgets.QMessageBox(self.parent)
+        msgBox.setWindowTitle("Delete " + self.name)
+        msgBox.setText('Are you sure you want to delete "{0}"?\nIt will go to the recycle bin.'.format(self.name))
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+        msgBox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
+        if(msgBox.exec() == QtWidgets.QMessageBox.StandardButton.Yes):
+            send2trash(self.projectPath)
+            index = self.parent.indexOfTopLevelItem(self.rowWidget)
+            self.parent.takeTopLevelItem(index)
         
-    def __init__(self, parent: QtWidgets.QTreeWidget, iconPath: str, name: str, description: str, editorVersion: str, unityPath: str, projectPath: str):
+    def __init__(self, parent: QtWidgets.QTreeWidget, name: str, projectPath: str, unityPath: str, editorVersion: str):
         self.parent = parent
-        self.iconPath = iconPath
         self.name = name
-        self.description = description
+        self.projectPath = projectPath.replace('/', '\\')
+        self.unityPath = unityPath.replace('/', '\\')
         self.editorVersion = editorVersion
-        self.unityPath = unityPath
-        self.projectPath = projectPath
 
         self.rowWidget = CustomSortTreeWidgetItem(parent)
         self.rowWidget.setData(0, QtCore.Qt.UserRole, self)
@@ -44,7 +79,15 @@ class ProjectData:
 
 
         ####DESCRIPTION####
-        self.rowWidget.setText(2, description)
+        self.descriptionFilePath = os.path.join(self.projectPath, "desc.txt")
+        self.descriptionExists = os.path.exists(self.descriptionFilePath)
+        if(self.descriptionExists):
+            with open(self.descriptionFilePath) as descriptionFile:
+                self.description = descriptionFile.read()
+        else:
+            self.description = ""
+
+        self.rowWidget.setText(2, self.description)
 
 
         ####MODIFIED####
@@ -96,11 +139,13 @@ class ProjectData:
         self.iconLabel = QtWidgets.QLabel(parent)
         self.iconLabel.setMinimumSize(QtCore.QSize(150, 150))
         self.iconLabel.setMaximumSize(QtCore.QSize(150, 150))
-        if(iconPath == None):
-            self.iconLabel.setPixmap(QtGui.QPixmap(":/images/UnityIconWhitePadded.png"))
-            iconPath = ""
+
+        self.iconPath = os.path.join(self.projectPath, "icon.png")
+        self.iconExists = os.path.exists(self.iconPath)
+        if(self.iconExists):
+            self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
         else:
-            self.iconLabel.setPixmap(QtGui.QPixmap(iconPath))
+            self.iconLabel.setPixmap(QtGui.QPixmap(":/images/UnityIconWhitePadded.png"))
         self.iconLabel.setScaledContents(True)
         self.iconLabel.setObjectName("icon")
 
@@ -109,6 +154,9 @@ class ProjectData:
         # TODO: Executing it after everything else has been initialized seems to fix the problem.
         parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
 
-        self.rowWidget.setSortData(0, iconPath)
+        if(self.iconExists):
+            self.rowWidget.setSortData(0, self.iconPath)
+        else:
+            self.rowWidget.setSortData(0, "")
 
         parent.addTopLevelItem(self.rowWidget)
