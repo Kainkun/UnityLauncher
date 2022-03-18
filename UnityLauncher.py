@@ -76,11 +76,13 @@ class UiImplement(Ui_MainWindow):
         if(item == None):
             return
         projectData = item.data(0, QtCore.Qt.UserRole)
-        print(projectData.name)
         menu = QtWidgets.QMenu()
-        menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addAction("Set Icon", lambda: projectData.setIcon())
+        menu.addAction("Set Description", lambda: projectData.setDescription())
+        menu.addSeparator()
         menu.addAction("Show in Explorer", lambda: projectData.showInExplorer())
+        menu.addSeparator()
+        menu.addAction("Add Editor Scripts", lambda: projectData.AddEditorScripts())
         menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))
@@ -94,7 +96,6 @@ class UiImplement(Ui_MainWindow):
                 item.setHidden(False)
             else:
                 item.setHidden(True)
-                
 
     def __openSettings(self):
         settings = SettingsDialog(self.centralwidget)

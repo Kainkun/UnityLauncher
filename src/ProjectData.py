@@ -1,8 +1,8 @@
 import os
-import shutil
 import subprocess
 import time
 
+from PIL import Image
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -35,6 +35,9 @@ class ProjectData:
         if(ok):
             self.description = text
             self.rowWidget.setText(2, text)
+            with open(self.descriptionFilePath, "w") as file:
+                file.write(text)
+
 
 
     def setIcon(self):
@@ -45,13 +48,35 @@ class ProjectData:
             file = fileDialog.selectedFiles()[0]
             if(self.iconExists):
                 send2trash(self.iconPath)
-            shutil.copyfile(file, self.iconPath)
+            img = Image.open(file)
+
+            basewidth = 300
+            baseHeight = 300
+            
+            if(img.width < img.height):
+                wpercent = (basewidth / float(img.width))
+                hsize = int((float(img.height) * float(wpercent)))
+                img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+            else:
+                hpercent = (baseHeight / float(img.height))
+                wsize = int((float(img.width) * float(hpercent)))
+                img = img.resize((wsize, baseHeight), Image.ANTIALIAS)
+
+            img = img.crop(((img.width - basewidth) // 2,
+                            (img.height - baseHeight) // 2,
+                            (img.width + basewidth) // 2,
+                            (img.height + baseHeight) // 2))
+
+            img.save(self.iconPath)
             self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
+            self.rowWidget.setSortData(0, self.iconPath)
 
     def showInExplorer(self):
         subprocess.Popen(r'explorer /select,"{0}"'.format(self.projectPath).replace('/', '\\'))
-        
 
+    def AddEditorScripts(self):
+        print("boop")
+        
     def deleteProject(self):
         print(self.projectPath)
         msgBox = QtWidgets.QMessageBox(self.parent)
@@ -79,7 +104,12 @@ class ProjectData:
 
 
         ####DESCRIPTION####
-        self.descriptionFilePath = os.path.join(self.projectPath, "desc.txt")
+
+        # #For backwards compatibility. Will mess up your last modified order. Maybe look into MOVE command.
+        # if(os.path.exists(os.path.join(self.projectPath, "desc.txt"))):
+        #     os.rename(os.path.join(self.projectPath, "desc.txt"), os.path.join(self.projectPath, "description.txt"))
+
+        self.descriptionFilePath = os.path.join(self.projectPath, "description.txt")
         self.descriptionExists = os.path.exists(self.descriptionFilePath)
         if(self.descriptionExists):
             with open(self.descriptionFilePath) as descriptionFile:
@@ -139,6 +169,34 @@ class ProjectData:
         self.iconLabel = QtWidgets.QLabel(parent)
         self.iconLabel.setMinimumSize(QtCore.QSize(150, 150))
         self.iconLabel.setMaximumSize(QtCore.QSize(150, 150))
+
+        # # For backwards compatibility. Will mess up your last modified order.
+        # original = os.path.join(self.projectPath, "icon.png")
+        # new = os.path.join(self.projectPath, "icon.png")
+        # if(os.path.exists(original)):
+        #     img = Image.open(original)
+        #     #img = img.convert('RGB')
+        #     #img.thumbnail((300,300), Image.ANTIALIAS)
+
+        #     basewidth = 300
+        #     baseHeight = 300
+            
+        #     if(img.width < img.height):
+        #         wpercent = (basewidth / float(img.width))
+        #         hsize = int((float(img.height) * float(wpercent)))
+        #         img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+        #     else:
+        #         hpercent = (baseHeight / float(img.height))
+        #         wsize = int((float(img.width) * float(hpercent)))
+        #         img = img.resize((wsize, baseHeight), Image.ANTIALIAS)
+
+        #     img = img.crop(((img.width - basewidth) // 2,
+        #                  (img.height - baseHeight) // 2,
+        #                  (img.width + basewidth) // 2,
+        #                  (img.height + baseHeight) // 2))
+
+        #     send2trash(original)
+        #     img.save(new)
 
         self.iconPath = os.path.join(self.projectPath, "icon.png")
         self.iconExists = os.path.exists(self.iconPath)
