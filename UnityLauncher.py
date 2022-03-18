@@ -18,8 +18,23 @@ from src.ProjectData import ProjectData
 from src.SettingsDialog import SettingsDialog
 
 class UiImplement(Ui_MainWindow):
-    def speak(self):
-        self.titleLabel.setText("bazinga")
+
+    def setupUi(self, MainWindow):
+        super().setupUi(MainWindow)
+        self.addProjectsToList()
+        self.projectTree.setColumnWidth(0,150)
+        self.projectTree.setColumnWidth(1,200)
+        self.projectTree.setColumnWidth(2,600)
+        self.projectTree.setColumnWidth(3,200)
+        self.projectTree.setColumnWidth(4,200)
+        self.projectTree.header().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
+        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
+        self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
+        self.projectTree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.projectTree.customContextMenuRequested.connect(lambda position: self.projectContextMenu(position))
+
+        self.SettingsButton.clicked.connect(lambda: self.__openSettings())
+        self.searchLineEdit.textChanged.connect(lambda text: self.searchBarChanged(text))
 
     def addProjectsToList(self):
         config = Config()
@@ -70,22 +85,16 @@ class UiImplement(Ui_MainWindow):
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))
 
-    def setupUi(self, MainWindow):
-        super().setupUi(MainWindow)
-        self.addProjectsToList()
-        self.projectTree.setColumnWidth(0,150)
-        self.projectTree.setColumnWidth(1,200)
-        self.projectTree.setColumnWidth(2,600)
-        self.projectTree.setColumnWidth(3,200)
-        self.projectTree.setColumnWidth(4,200)
-        self.projectTree.header().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
-        self.projectTree.sortItems(3, QtCore.Qt.SortOrder.AscendingOrder)
-        self.projectTree.itemClicked.connect(lambda item: self.projectClicked(item))
-        self.projectTree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.projectTree.customContextMenuRequested.connect(lambda position: self.projectContextMenu(position))
-
-        self.testButton.clicked.connect(lambda: self.speak())
-        self.SettingsButton.clicked.connect(lambda: self.__openSettings())
+    def searchBarChanged(self, text: str):
+        for index in range(self.projectTree.topLevelItemCount()):
+            item = self.projectTree.topLevelItem(index)
+            searchText = ''.join(filter(str.isalnum, text.lower()))
+            itemText = ''.join(filter(str.isalnum, item.text(1).lower()))
+            if(searchText in itemText):
+                item.setHidden(False)
+            else:
+                item.setHidden(True)
+                
 
     def __openSettings(self):
         settings = SettingsDialog(self.centralwidget)
