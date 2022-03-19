@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace Editor.UnityLauncher
+namespace Editor
 {
     public class TextureScale
     {

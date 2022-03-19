@@ -1,0 +1,14 @@
+{
+  "name": "com.kainkunandpoe.unitylauncherutilities",
+  "version": "1.0.0",
+  "displayName": "Unity Launcher Utilities",
+  "description": "Tools for editing data for Unity Launcher",
+  "unity": "2020.3",
+  "unityRelease": "22f1",
+  "keywords": [
+    "Launcher",
+    "Utility",
+    "Utilities"
+  ],
+  "type": "tool"
+}

@@ -1,10 +1,9 @@
-using System.Collections;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using System.Threading.Tasks;
 
-namespace Editor.UnityLauncher
+namespace Editor
 {
     public class MenuItems : MonoBehaviour
     {
