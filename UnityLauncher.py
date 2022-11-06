@@ -61,9 +61,37 @@ class UiImplement(Ui_MainWindow):
         self.projectTree.customContextMenuRequested.connect(
             lambda position: self.projectContextMenu(position))
 
-        self.SettingsButton.clicked.connect(lambda: self.__openSettings())
         self.searchLineEdit.textChanged.connect(
             lambda text: self.searchBarChanged(text))
+
+        self.menubar.addAction("Settings", lambda: self.__openSettings())
+        self.actionSet_All_Project_Icons.triggered.connect(
+            lambda: self.setAllProjectIcons())
+        self.actionSet_All_Project_Descriptions.triggered.connect(
+            lambda: self.setAllProjectDescriptions())
+        self.actionAdd_Editor_Scripts_to_All_Projects.triggered.connect(
+            lambda: self.addEditorScriptsToAllProjects())
+
+    def setAllProjectIcons(self):
+        img = ProjectData.getIconDialogue()
+        if(not img):
+            return
+        for i in range(self.projectTree.invisibleRootItem().childCount()):
+            projectData: ProjectData = self.projectTree.invisibleRootItem().child(i).data(0, QtCore.Qt.UserRole)
+            projectData.setIcon(img)
+
+    def setAllProjectDescriptions(self):
+        text = ProjectData.getDescriptionDialogue(self.parent)
+        if(not text):
+            return
+        for i in range(self.projectTree.invisibleRootItem().childCount()):
+            projectData: ProjectData = self.projectTree.invisibleRootItem().child(i).data(0, QtCore.Qt.UserRole)
+            projectData.setDescription(text)
+
+    def addEditorScriptsToAllProjects(self):
+        for i in range(self.projectTree.invisibleRootItem().childCount()):
+            projectData: ProjectData = self.projectTree.invisibleRootItem().child(i).data(0, QtCore.Qt.UserRole)
+            projectData.AddEditorScripts()
 
     def addProjectsToList(self):
         self.parent.config.readChanges()
@@ -141,7 +169,6 @@ class UiImplement(Ui_MainWindow):
         menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
 
-        menu.setStyleSheet("QMenu::item:selected { background-color:rgb(38, 38, 38) }")
         menu.exec(self.projectTree.mapToGlobal(position))
 
     def searchBarChanged(self, text: str):

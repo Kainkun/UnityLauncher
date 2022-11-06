@@ -24,12 +24,26 @@ class ProjectData:
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
         return True
 
-    def setDescription(self):
-        dialog = QtWidgets.QInputDialog(self.parent)
+    def setDescription(self, text=None):
+        if (not text):
+            text = ProjectData.getDescriptionDialogue(self.parent, self)
+        if (text):
+            self.description = text
+            self.rowWidget.setText(2, text)
+            with open(self.descriptionFilePath, "w") as file:
+                file.write(text)
+
+    @staticmethod
+    def getDescriptionDialogue(parent, projectData=None):
+        dialog = QtWidgets.QInputDialog(parent)
         dialog.setOptions(QtWidgets.QInputDialog.UsePlainTextEditForTextInput)
-        dialog.setWindowTitle(self.name + " Description")
+        if (projectData and projectData.name):
+            dialog.setWindowTitle(projectData.name + " Description")
+        else:
+            dialog.setWindowTitle("Description")
         dialog.setLabelText("Edit Description")
-        dialog.setTextValue(self.description)
+        if(projectData):
+            dialog.setTextValue(projectData.description)
         dialog.setWindowFlag(
             QtCore.Qt.WindowType.WindowContextHelpButtonHint, False)
         dialog.setInputMode(QtWidgets.QInputDialog.InputMode.TextInput)
@@ -38,19 +52,30 @@ class ProjectData:
         ok = dialog.exec_()
         text = dialog.textValue()
         if (ok):
-            self.description = text
-            self.rowWidget.setText(2, text)
-            with open(self.descriptionFilePath, "w") as file:
-                file.write(text)
+            return text
+        return None
 
-    def setIcon(self):
+    def setIcon(self, img=None):
+
+        if (not img):
+            img = ProjectData.getIconDialogue()
+        if (not img):
+            return
+        if (self.iconExists):
+            send2trash(self.iconPath)
+        img.save(self.iconPath)
+
+        self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
+        self.rowWidget.setSortData(0, self.iconPath)
+
+    @staticmethod
+    def getIconDialogue():
         fileDialog = QtWidgets.QFileDialog()
         fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
         selected = fileDialog.exec()
         if (selected):
             file = fileDialog.selectedFiles()[0]
-            if (self.iconExists):
-                send2trash(self.iconPath)
+
             img = Image.open(file)
 
             basewidth = 300
@@ -69,10 +94,8 @@ class ProjectData:
                             (img.height - baseHeight) // 2,
                             (img.width + basewidth) // 2,
                             (img.height + baseHeight) // 2))
-
-            img.save(self.iconPath)
-            self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
-            self.rowWidget.setSortData(0, self.iconPath)
+            return img
+        return None
 
     def showInExplorer(self):
         subprocess.Popen(

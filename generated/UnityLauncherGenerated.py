@@ -45,6 +45,11 @@ class Ui_MainWindow(object):
 "    background: rgb(38, 38, 38);\n"
 "}\n"
 "\n"
+"QMenu::item:selected\n"
+"{\n"
+"    background-color:rgb(38, 38, 38)\n"
+"}\n"
+"\n"
 "QHeaderView::up-arrow\n"
 "{\n"
 "    image: url(:/images/UpWhiteArrow.png);\n"
@@ -79,9 +84,6 @@ class Ui_MainWindow(object):
         self.searchLineEdit.setClearButtonEnabled(True)
         self.searchLineEdit.setObjectName("searchLineEdit")
         self.gridLayout.addWidget(self.searchLineEdit, 1, 1, 1, 2)
-        self.SettingsButton = QtWidgets.QPushButton(self.topWidget)
-        self.SettingsButton.setObjectName("SettingsButton")
-        self.gridLayout.addWidget(self.SettingsButton, 0, 2, 1, 1)
         self.gridLayout.setColumnStretch(0, 5)
         self.gridLayout.setColumnStretch(1, 1)
         self.gridLayout.setColumnStretch(2, 1)
@@ -96,13 +98,30 @@ class Ui_MainWindow(object):
         self.projectTree.setObjectName("projectTree")
         self.centralwidgetLayout.addWidget(self.projectTree, 2, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 830, 18))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 830, 18))
+        self.menubar.setObjectName("menubar")
+        self.menuEdit = QtWidgets.QMenu(self.menubar)
+        self.menuEdit.setObjectName("menuEdit")
+        MainWindow.setMenuBar(self.menubar)
+        self.actionSet_All_Project_Icons = QtWidgets.QAction(MainWindow)
+        self.actionSet_All_Project_Icons.setObjectName("actionSet_All_Project_Icons")
+        self.actionSet_All_Project_Descriptions = QtWidgets.QAction(MainWindow)
+        self.actionSet_All_Project_Descriptions.setObjectName("actionSet_All_Project_Descriptions")
+        self.actionDelete_All_Projects = QtWidgets.QAction(MainWindow)
+        self.actionDelete_All_Projects.setObjectName("actionDelete_All_Projects")
+        self.actionAdd_Editor_Scripts_to_All_Projects = QtWidgets.QAction(MainWindow)
+        self.actionAdd_Editor_Scripts_to_All_Projects.setObjectName("actionAdd_Editor_Scripts_to_All_Projects")
+        self.actionsettingshere = QtWidgets.QAction(MainWindow)
+        self.actionsettingshere.setObjectName("actionsettingshere")
+        self.menuEdit.addAction(self.actionSet_All_Project_Icons)
+        self.menuEdit.addAction(self.actionSet_All_Project_Descriptions)
+        self.menuEdit.addSeparator()
+        self.menuEdit.addAction(self.actionAdd_Editor_Scripts_to_All_Projects)
+        self.menubar.addAction(self.menuEdit.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -112,13 +131,18 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Unity Launcher"))
         self.titleLabel.setText(_translate("MainWindow", "Projects"))
         self.searchLineEdit.setPlaceholderText(_translate("MainWindow", "Search"))
-        self.SettingsButton.setText(_translate("MainWindow", "Settings"))
         self.projectTree.setSortingEnabled(True)
         self.projectTree.headerItem().setText(0, _translate("MainWindow", "ICON"))
         self.projectTree.headerItem().setText(1, _translate("MainWindow", "NAME"))
         self.projectTree.headerItem().setText(2, _translate("MainWindow", "DESCRIPTION"))
         self.projectTree.headerItem().setText(3, _translate("MainWindow", "MODIFIED"))
         self.projectTree.headerItem().setText(4, _translate("MainWindow", "EDITOR VERSION"))
+        self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
+        self.actionSet_All_Project_Icons.setText(_translate("MainWindow", "Set All Project Icons"))
+        self.actionSet_All_Project_Descriptions.setText(_translate("MainWindow", "Set All Project Descriptions"))
+        self.actionDelete_All_Projects.setText(_translate("MainWindow", "Delete All Projects"))
+        self.actionAdd_Editor_Scripts_to_All_Projects.setText(_translate("MainWindow", "Add Editor Scripts to All Projects"))
+        self.actionsettingshere.setText(_translate("MainWindow", "settingshere"))
 import generated.resources_rc
 
 
