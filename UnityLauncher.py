@@ -19,7 +19,7 @@ else:
 class LauncherMainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args):
         QtWidgets.QMainWindow.__init__(self, *args)
-        self.config = Config()
+        self.config: Config = Config()
         ui = UiImplement(self)
         ui.setupUi(self)
         x, y = self.config.getWindowPosition()
@@ -28,6 +28,7 @@ class LauncherMainWindow(QtWidgets.QMainWindow):
         self.move(QtCore.QPoint(x, y))
 
     def closeEvent(self, closeEvent: QtGui.QCloseEvent):
+        self.config.readChanges()
         self.config.setWindowSize((self.size().width(), self.size().height()))
         self.config.setWindowPosition((self.pos().x(), self.pos().y()))
         self.config.writeChanges()
@@ -36,7 +37,7 @@ class LauncherMainWindow(QtWidgets.QMainWindow):
 
 class UiImplement(Ui_MainWindow):
 
-    def __init__(self, parent):
+    def __init__(self, parent: LauncherMainWindow):
         super().__init__()
         self.parent = parent
 
@@ -62,7 +63,7 @@ class UiImplement(Ui_MainWindow):
             lambda text: self.searchBarChanged(text))
 
     def addProjectsToList(self):
-
+        self.parent.config.readChanges()
         for projectsFolderPath in self.parent.config.getProjectFolders():
             if (not os.path.exists(projectsFolderPath)):
                 print('Error: Projects Folder "{0}" Does Not Exist'.format(

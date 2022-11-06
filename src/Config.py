@@ -84,8 +84,8 @@ class Config():
         """ Creates the default JSON structure for first-time users. """
 
         d = OrderedDict()
-        d[self.__windowSize] = []
-        d[self.__windowPosition] = []
+        d[self.__windowSize] = [830, 535]
+        d[self.__windowPosition] = [1504, 767]
         d[self.__projectFoldersKey] = []
         d[self.__editorFoldersKey] = []
         return d
