@@ -3,11 +3,11 @@ from PyQt5 import QtWidgets
 
 class CustomSortTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     def __lt__(self, other):
-        if (not isinstance(other, CustomSortTreeWidgetItem)):
+        if not isinstance(other, CustomSortTreeWidgetItem):
             return super(CustomSortTreeWidgetItem, self).__lt__(other)
 
         tree = self.treeWidget()
-        if (not tree):
+        if not tree:
             column = 0
         else:
             column = tree.sortColumn()

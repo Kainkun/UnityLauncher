@@ -45,6 +45,11 @@ QTreeView::item:hover
 	background: rgb(38, 38, 38);
 }
 
+QMenu::item:selected
+{
+	background-color:rgb(38, 38, 38)
+}
+
 QHeaderView::up-arrow
 {
 	image: url(:/images/UpWhiteArrow.png);
@@ -97,18 +102,17 @@ QHeaderView::down-arrow
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="SettingsButton">
-         <property name="text">
-          <string>Settings</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
     <item row="2" column="0" colspan="2">
      <widget class="QTreeWidget" name="projectTree">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
       <property name="indentation">
        <number>0</number>
       </property>
@@ -153,6 +157,7 @@ QHeaderView::down-arrow
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -162,8 +167,42 @@ QHeaderView::down-arrow
      <height>18</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionSet_All_Project_Icons"/>
+    <addaction name="actionSet_All_Project_Descriptions"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdd_Editor_Scripts_to_All_Projects"/>
+   </widget>
+   <addaction name="menuEdit"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSet_All_Project_Icons">
+   <property name="text">
+    <string>Set All Project Icons</string>
+   </property>
+  </action>
+  <action name="actionSet_All_Project_Descriptions">
+   <property name="text">
+    <string>Set All Project Descriptions</string>
+   </property>
+  </action>
+  <action name="actionDelete_All_Projects">
+   <property name="text">
+    <string>Delete All Projects</string>
+   </property>
+  </action>
+  <action name="actionAdd_Editor_Scripts_to_All_Projects">
+   <property name="text">
+    <string>Add Editor Scripts to All Projects</string>
+   </property>
+  </action>
+  <action name="actionsettingshere">
+   <property name="text">
+    <string>settingshere</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>

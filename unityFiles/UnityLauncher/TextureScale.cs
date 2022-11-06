@@ -1,3 +1,5 @@
+//v1.1
+
 // From: https://gist.github.com/gszauer/7799899
 
 // Modified from: http://wiki.unity3d.com/index.php/TextureScale#TextureScale.cs
@@ -27,7 +29,11 @@ namespace Editor.UnityLauncher
 
             BilinearScale(0, newHeight);
 
+#if UNITY_2021_2_OR_NEWER
             tex.Reinitialize(newWidth, newHeight);
+#else
+            tex.Resize(newWidth, newHeight);
+#endif
             tex.SetPixels(newColors);
             tex.Apply();
         }
