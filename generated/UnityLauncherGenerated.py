@@ -87,6 +87,8 @@ class Ui_MainWindow(object):
         self.gridLayout.setColumnStretch(2, 1)
         self.centralwidgetLayout.addWidget(self.topWidget, 0, 0, 1, 1)
         self.projectTree = QtWidgets.QTreeWidget(self.centralwidget)
+        self.projectTree.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.projectTree.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         self.projectTree.setIndentation(0)
         self.projectTree.setItemsExpandable(False)
         self.projectTree.setWordWrap(True)

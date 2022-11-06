@@ -109,6 +109,12 @@ QHeaderView::down-arrow
     </item>
     <item row="2" column="0" colspan="2">
      <widget class="QTreeWidget" name="projectTree">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
       <property name="indentation">
        <number>0</number>
       </property>
