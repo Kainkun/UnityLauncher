@@ -1,12 +1,21 @@
-### Unity Launcher
-*This is a PyQt Tool that lists your Unity projects with icons and descriptions!*
-![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/MainWindow.png)
+## Unity Launcher
+This is a PyQt Tool that lists your Unity projects with icons and descriptions!
 
-### Instructions
-1. To install it, download the .zip from the Releases tab and extract the file to wherever you'd like.
-2. UnityLauncher.exe runs the tool. I recommend right clicking it and "Send To Desktop" to create a shortcut.
-3. To start using Unity Launcher, click "Settings" on the top left and add your projects folder and your Unity editors folder.
-![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/Settings.png)
+![Main Window Example](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/MainWindow.png)
+
+## Instructions
+1. To install it, download the .zip from the Releases tab and extract the file to wherever you'd like
+2. UnityLauncher.exe runs the tool. I recommend right clicking it and "Send To Desktop" to create a shortcut
+3. To start using Unity Launcher, click "Settings" on the top left and add your projects folder and your Unity editors folder
+
+    ![Settings Popup Example](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/Settings.png)
+4. Unity Launcher will auto-populate. Click a project to launch it!
+5. You can right click on a project to set its icon and description
+6. The "Add Editor Scripts" button will copy a couple handy editor scripts to your project
+    - "Screenshot Project Icon" will take a screenshot of your game view and set that as your project icon
+    - "Set Project Description" Will let you edit your project's description
+
+    ![Unity Menu Bar Example](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/UnityMenuBar.png)
 
 ## Development
 To build the executable files from source, run **BuildOneDir.bat**.
