@@ -4,7 +4,7 @@
 ![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/UnityLauncherExample.png)
 
 ## Development
-To build the executable files from source, run either **BuildOneDir.bat**.
+To build the executable files from source, run **BuildOneDir.bat**.
 These scripts will compile the project to folder named "build".
 
 If you make any changes to the UI via Qt Designer, make sure to run the **Generate.ps1** script!
