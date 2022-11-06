@@ -17,11 +17,12 @@ class ProjectData:
     def openProject(self):
         if (self.unityPath == None):
             print("Could not find valid unity editor path")
-            return
+            return False
         self.timeSinceModifiedDisplay = "Just now!"
         self.secondsSinceModified = 0
         self.rowWidget.setText(3, self.timeSinceModifiedDisplay)
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
+        return True
 
     def setDescription(self):
         dialog = QtWidgets.QInputDialog(self.parent)
@@ -82,10 +83,10 @@ class ProjectData:
         Path(editorFolder).mkdir(parents=True, exist_ok=True)
         
         MenuItems = os.path.join(
-            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unity\\UnityLauncher\\MenuItems.cs")
+            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unityFiles\\UnityLauncher\\MenuItems.cs")
 
         TextureScale = os.path.join(
-            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unity\\UnityLauncher\\TextureScale.cs")
+            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unityFiles\\UnityLauncher\\TextureScale.cs")
 
         shutil.copy(MenuItems, editorFolder)
         shutil.copy(TextureScale, editorFolder)

@@ -101,7 +101,15 @@ class UiImplement(Ui_MainWindow):
                             projectPath, unityPath, editorVersion)
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
-        item.data(0, QtCore.Qt.UserRole).openProject()
+        success = item.data(0, QtCore.Qt.UserRole).openProject()
+        if(not success):
+            msg = QtWidgets.QMessageBox(self.parent)
+            # msg.setIcon(QtWidgets.QMessageBox.warning())
+            msg.setText("Missing Unity Version")
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setInformativeText('Unity version {0} does not exist in the settings folders'.format(item.data(0, QtCore.Qt.UserRole).editorVersion))
+            msg.setWindowTitle("Error")
+            msg.exec_()
 
     def projectContextMenu(self, position: QtCore.QPoint):
         item = self.projectTree.itemAt(position)
