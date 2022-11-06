@@ -17,7 +17,28 @@ from src.Config import Config
 from src.ProjectData import ProjectData
 from src.SettingsDialog import SettingsDialog
 
+class LauncherMainWindow(QtWidgets.QMainWindow):
+    def __init__(self, *args):
+        QtWidgets.QMainWindow.__init__(self, *args)
+        self.config = Config()
+        ui = UiImplement(self)
+        ui.setupUi(self)
+        x,y = self.config.getWindowPosition()
+        w,h = self.config.getWindowSize()
+        self.resize(QtCore.QSize(w,h))
+        self.move(QtCore.QPoint(x,y))
+
+    def closeEvent(self, closeEvent: QtGui.QCloseEvent):
+        self.config.setWindowSize((self.size().width(), self.size().height()))
+        self.config.setWindowPosition((self.pos().x(), self.pos().y()))
+        self.config.writeChanges()
+        return super().closeEvent(closeEvent)
+
 class UiImplement(Ui_MainWindow):
+
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -37,9 +58,8 @@ class UiImplement(Ui_MainWindow):
         self.searchLineEdit.textChanged.connect(lambda text: self.searchBarChanged(text))
 
     def addProjectsToList(self):
-        config = Config()
 
-        for projectsFolderPath in config.getProjectFolders():
+        for projectsFolderPath in self.parent.config.getProjectFolders():
             if(not os.path.exists(projectsFolderPath)):
                 print('Error: Projects Folder "{0}" Does Not Exist'.format(projectsFolderPath))
                 continue
@@ -60,7 +80,7 @@ class UiImplement(Ui_MainWindow):
                 editorVersion = firstline.split(" ")[1]
 
                 unityPath = None
-                for unityEditorFolder in config.getEditorFolders():
+                for unityEditorFolder in self.parent.config.getEditorFolders():
                     tryUnityPath = os.path.join(unityEditorFolder, editorVersion, r"Editor\Unity.exe")
                     if(os.path.exists(tryUnityPath)):
                         unityPath = tryUnityPath
@@ -108,11 +128,9 @@ class UiImplement(Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = UiImplement()
-    ui.setupUi(MainWindow)
-
+    MainWindow = LauncherMainWindow()
     MainWindow.show()
+
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

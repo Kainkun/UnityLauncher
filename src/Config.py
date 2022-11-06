@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 import os
 import json
 import typing
@@ -19,10 +21,28 @@ class Config():
             keep in mind there is hidden static state associated with this class.
     """
 
-    __configData: typing.Dict = {}
+    __configData: typing.OrderedDict = {}
     __configName: str = "config.json"
+    __windowSize = "LauncherWindowSize"
+    __windowPosition = "LauncherWindowPosition"
     __projectFoldersKey = "ProjectFolders"
     __editorFoldersKey = "EditorFolders"
+
+    # Getter-Setter for Window size
+
+    def setWindowSize(self, size) -> None:
+        self.__configData[self.__windowSize] = size
+
+    def getWindowSize(self):
+        return self.__configData[self.__windowSize]
+
+    # Getter-Setter for Window position
+
+    def setWindowPosition(self, position) -> None:
+        self.__configData[self.__windowPosition] = position
+
+    def getWindowPosition(self):
+        return self.__configData[self.__windowPosition]
 
     # Getter-Setter for Project Folders
     
@@ -44,7 +64,7 @@ class Config():
 
     def writeChanges(self):
         with open(self.__configName, mode = "w+") as configFile:
-            json.dump(self.__configData, configFile, indent=4, sort_keys=True)
+            json.dump(self.__configData, configFile, indent=4)
 
     def readChanges(self):
         with open(self.__configName) as configFile:
@@ -60,11 +80,13 @@ class Config():
                 
         self.readChanges()
 
-    def __createDefaultConfig(self) -> typing.Dict:
+    def __createDefaultConfig(self) -> typing.OrderedDict:
 
         """ Creates the default JSON structure for first-time users. """
 
-        return {
-            self.__projectFoldersKey : [],
-            self.__editorFoldersKey : []
-        }
+        d = OrderedDict()
+        d[self.__windowSize] = []
+        d[self.__windowPosition] = []
+        d[self.__projectFoldersKey] = []
+        d[self.__editorFoldersKey] = []
+        return d
