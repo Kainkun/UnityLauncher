@@ -78,10 +78,14 @@ class ProjectData:
         subprocess.Popen(
             r'explorer /select,"{0}"'.format(self.projectPath).replace('/', '\\'))
 
+    def EditorScriptsExist(self):
+        return os.path.exists(os.path.join(self.projectPath, "Assets\\Editor\\UnityLauncher"))
+
     def AddEditorScripts(self):
-        editorFolder = os.path.join(self.projectPath, "Assets\\Editor\\UnityLauncher")
+        editorFolder = os.path.join(
+            self.projectPath, "Assets\\Editor\\UnityLauncher")
         Path(editorFolder).mkdir(parents=True, exist_ok=True)
-        
+
         MenuItems = os.path.join(
             os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unityFiles\\UnityLauncher\\MenuItems.cs")
 

@@ -10,7 +10,8 @@ import sys
 
 if (os.path.basename(sys.executable) == "UnityLauncher.exe"):
     # applicationPath = os.path.dirname(sys.executable)
-    os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.dirname(sys.executable)
+    os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.dirname(
+        sys.executable)
 else:
     # applicationPath = os.path.abspath(".")
     os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.abspath(".")
@@ -102,12 +103,13 @@ class UiImplement(Ui_MainWindow):
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         success = item.data(0, QtCore.Qt.UserRole).openProject()
-        if(not success):
+        if (not success):
             msg = QtWidgets.QMessageBox(self.parent)
             # msg.setIcon(QtWidgets.QMessageBox.warning())
             msg.setText("Missing Unity Version")
             msg.setIcon(QtWidgets.QMessageBox.Warning)
-            msg.setInformativeText('Unity version {0} does not exist in the settings folders'.format(item.data(0, QtCore.Qt.UserRole).editorVersion))
+            msg.setInformativeText('Unity version {0} does not exist in the settings folders'.format(
+                item.data(0, QtCore.Qt.UserRole).editorVersion))
             msg.setWindowTitle("Error")
             msg.exec_()
 
@@ -115,16 +117,17 @@ class UiImplement(Ui_MainWindow):
         item = self.projectTree.itemAt(position)
         if (item == None):
             return
-        projectData = item.data(0, QtCore.Qt.UserRole)
+        projectData: ProjectData = item.data(0, QtCore.Qt.UserRole)
         menu = QtWidgets.QMenu()
         menu.addAction("Set Icon", lambda: projectData.setIcon())
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addSeparator()
         menu.addAction("Show in Explorer",
                        lambda: projectData.showInExplorer())
-        menu.addSeparator()
-        menu.addAction("Add Editor Scripts",
-                       lambda: projectData.AddEditorScripts())
+        if (not projectData.EditorScriptsExist()):
+            menu.addSeparator()
+            menu.addAction("Add Editor Scripts",
+                           lambda: projectData.AddEditorScripts())
         menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))
