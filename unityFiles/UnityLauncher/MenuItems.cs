@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace Editor.UnityLauncher
 {
     public class MenuItems : MonoBehaviour
     {
