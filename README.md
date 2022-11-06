@@ -1,12 +1,12 @@
 ### Unity Launcher
 *This is a PyQt Tool that lists your Unity projects with icons and descriptions!*
+![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/MainWindow.png)
 
 ### Instructions
 1. To install it, download the .zip from the Releases tab and extract the file to wherever you'd like.
 2. UnityLauncher.exe runs the tool. I recommend right clicking it and "Send To Desktop" to create a shortcut.
 3. To start using Unity Launcher, click "Settings" on the top left and add your projects folder and your Unity editors folder.
-
-![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/UnityLauncherExample.png)
+![Unity Launcher Example Image](https://raw.githubusercontent.com/Kainkun/UnityLauncher/main/images/Examples/Settings.png)
 
 ## Development
 To build the executable files from source, run **BuildOneDir.bat**.
