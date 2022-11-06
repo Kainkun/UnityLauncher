@@ -1,3 +1,5 @@
+//v1.1
+
 // From: https://gist.github.com/gszauer/7799899
 
 // Modified from: http://wiki.unity3d.com/index.php/TextureScale#TextureScale.cs

@@ -16,6 +16,8 @@ else:
     # applicationPath = os.path.abspath(".")
     os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.abspath(".")
 
+os.environ["UNITY_LAUNCHER_VERSION"] = "v1.1"
+
 
 class LauncherMainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args):
@@ -124,10 +126,18 @@ class UiImplement(Ui_MainWindow):
         menu.addSeparator()
         menu.addAction("Show in Explorer",
                        lambda: projectData.showInExplorer())
-        if (not projectData.EditorScriptsExist()):
+
+        result = projectData.EditorScriptsUpToDate()
+        print(result)
+        if (result == 1):
             menu.addSeparator()
             menu.addAction("Add Editor Scripts",
                            lambda: projectData.AddEditorScripts())
+        elif (result == 2):
+            menu.addSeparator()
+            menu.addAction("Update Editor Scripts",
+                           lambda: projectData.AddEditorScripts())
+
         menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
         menu.exec(self.projectTree.mapToGlobal(position))

@@ -78,13 +78,45 @@ class ProjectData:
         subprocess.Popen(
             r'explorer /select,"{0}"'.format(self.projectPath).replace('/', '\\'))
 
-    def EditorScriptsExist(self):
-        return os.path.exists(os.path.join(self.projectPath, "Assets\\Editor\\UnityLauncher"))
+    def EditorScriptsUpToDate(self):
+        editorScriptsFolder = os.path.join(
+            self.projectPath, "Assets\\Editor\\UnityLauncher")
+
+        MenuItems = os.path.join(editorScriptsFolder, "MenuItems.cs")
+        TextureScale = os.path.join(editorScriptsFolder, "TextureScale.cs")
+
+        if (not os.path.exists(MenuItems)):
+            return 1
+
+        if (not os.path.exists(TextureScale)):
+            return 1
+
+        expectedFirstLine = r"//" + os.environ["UNITY_LAUNCHER_VERSION"]
+
+        print(expectedFirstLine)
+
+        with open(MenuItems) as f:
+            first_line = f.readline()
+            print(first_line)
+            menuItemsUptoDate = first_line.startswith(expectedFirstLine)
+
+        with open(TextureScale) as f:
+            first_line = f.readline()
+            print(first_line)
+            textureScaleUptoDate = first_line.startswith(expectedFirstLine)
+
+        print(menuItemsUptoDate)
+        print(textureScaleUptoDate)
+
+        if (menuItemsUptoDate and textureScaleUptoDate):
+            return 0
+        else:
+            return 2
 
     def AddEditorScripts(self):
-        editorFolder = os.path.join(
+        editorScriptsFolder = os.path.join(
             self.projectPath, "Assets\\Editor\\UnityLauncher")
-        Path(editorFolder).mkdir(parents=True, exist_ok=True)
+        Path(editorScriptsFolder).mkdir(parents=True, exist_ok=True)
 
         MenuItems = os.path.join(
             os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unityFiles\\UnityLauncher\\MenuItems.cs")
@@ -92,8 +124,8 @@ class ProjectData:
         TextureScale = os.path.join(
             os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unityFiles\\UnityLauncher\\TextureScale.cs")
 
-        shutil.copy(MenuItems, editorFolder)
-        shutil.copy(TextureScale, editorFolder)
+        shutil.copy(MenuItems, editorScriptsFolder)
+        shutil.copy(TextureScale, editorScriptsFolder)
 
     def deleteProject(self):
         print(self.projectPath)
