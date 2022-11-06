@@ -93,20 +93,13 @@ class ProjectData:
 
         expectedFirstLine = r"//" + os.environ["UNITY_LAUNCHER_VERSION"]
 
-        print(expectedFirstLine)
-
         with open(MenuItems) as f:
             first_line = f.readline()
-            print(first_line)
             menuItemsUptoDate = first_line.startswith(expectedFirstLine)
 
         with open(TextureScale) as f:
             first_line = f.readline()
-            print(first_line)
             textureScaleUptoDate = first_line.startswith(expectedFirstLine)
-
-        print(menuItemsUptoDate)
-        print(textureScaleUptoDate)
 
         if (menuItemsUptoDate and textureScaleUptoDate):
             return 0
@@ -128,7 +121,6 @@ class ProjectData:
         shutil.copy(TextureScale, editorScriptsFolder)
 
     def deleteProject(self):
-        print(self.projectPath)
         msgBox = QtWidgets.QMessageBox(self.parent)
         msgBox.setWindowTitle("Delete " + self.name)
         msgBox.setText(
