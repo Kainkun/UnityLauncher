@@ -1,7 +1,9 @@
 import os
+import shutil
 import subprocess
 import time
 
+from pathlib import Path
 from PIL import Image
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -76,7 +78,17 @@ class ProjectData:
             r'explorer /select,"{0}"'.format(self.projectPath).replace('/', '\\'))
 
     def AddEditorScripts(self):
-        print("boop")
+        editorFolder = os.path.join(self.projectPath, "Assets\\Editor\\UnityLauncher")
+        Path(editorFolder).mkdir(parents=True, exist_ok=True)
+        
+        MenuItems = os.path.join(
+            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unity\\UnityLauncher\\MenuItems.cs")
+
+        TextureScale = os.path.join(
+            os.environ["UNITY_LAUNCHER_APPLICATION_PATH"], "unity\\UnityLauncher\\TextureScale.cs")
+
+        shutil.copy(MenuItems, editorFolder)
+        shutil.copy(TextureScale, editorFolder)
 
     def deleteProject(self):
         print(self.projectPath)

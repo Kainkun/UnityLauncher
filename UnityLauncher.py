@@ -8,12 +8,12 @@ from PyQt5 import QtCore
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'generated'))
-
 if (os.path.basename(sys.executable) == "UnityLauncher.exe"):
-    applicationPath = os.path.dirname(sys.executable)
+    # applicationPath = os.path.dirname(sys.executable)
+    os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.dirname(sys.executable)
 else:
-    applicationPath = os.path.abspath(".")
+    # applicationPath = os.path.abspath(".")
+    os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.abspath(".")
 
 
 class LauncherMainWindow(QtWidgets.QMainWindow):
