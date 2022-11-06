@@ -118,7 +118,7 @@ class UiImplement(Ui_MainWindow):
         if (item == None):
             return
         projectData: ProjectData = item.data(0, QtCore.Qt.UserRole)
-        menu = QtWidgets.QMenu()
+        menu = QtWidgets.QMenu(self.parent)
         menu.addAction("Set Icon", lambda: projectData.setIcon())
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addSeparator()
