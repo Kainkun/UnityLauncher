@@ -45,9 +45,14 @@ QTreeView::item:hover
 	background: rgb(38, 38, 38);
 }
 
+QMenuBar::item::selected
+{
+            background-color: rgb(64, 64, 64);
+}
+
 QMenu::item:selected
 {
-	background-color:rgb(38, 38, 38)
+	background-color:rgb(64, 64, 64)
 }
 
 QHeaderView::up-arrow
