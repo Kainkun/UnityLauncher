@@ -4,6 +4,7 @@ import os
 import json
 import typing
 
+
 class Config():
     """ 
         Handles the serialization and deserialization of persistent data for the UnityLauncher.
@@ -45,7 +46,7 @@ class Config():
         return self.__configData[self.__windowPosition]
 
     # Getter-Setter for Project Folders
-    
+
     def setProjectFolders(self, folders: typing.List[str]) -> None:
         self.__configData[self.__projectFoldersKey] = folders
 
@@ -63,7 +64,7 @@ class Config():
     # Serialization
 
     def writeChanges(self):
-        with open(self.__configName, mode = "w+") as configFile:
+        with open(self.__configName, mode="w+") as configFile:
             json.dump(self.__configData, configFile, indent=4)
 
     def readChanges(self):
@@ -71,17 +72,15 @@ class Config():
             self.__configData = json.load(configFile)
 
     def __init__(self) -> None:
-
         """ Handles the serialization and deserialization of persistent data for the UnityLauncher. """
 
         if not os.path.exists(self.__configName):
             self.__configData = self.__createDefaultConfig()
             self.writeChanges()
-                
+
         self.readChanges()
 
     def __createDefaultConfig(self) -> typing.OrderedDict:
-
         """ Creates the default JSON structure for first-time users. """
 
         d = OrderedDict()

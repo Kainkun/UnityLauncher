@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QWidget, QFileDialog
 from generated.FolderListGenerated import Ui_FolderListWidget
 from src.MultiFileDialog import MultiFileDialog
 
+
 class FolderListWidget(QWidget):
     """
         A Widget that allows the user to select multiple Folders.
@@ -22,7 +23,6 @@ class FolderListWidget(QWidget):
     """
 
     def getContents(self) -> typing.List[str]:
-        
         """ A list of folder paths that the user has selected, as strings. """
 
         folderList = self.getUi().FolderList
@@ -34,26 +34,25 @@ class FolderListWidget(QWidget):
         return result
 
     def setContents(self, contents: typing.List[str]) -> None:
-
         """ Updates the list of folder paths that the user has selected. """
 
         folderList = self.getUi().FolderList
-        
+
         for item in contents:
             folderList.addItem(item)
 
     def getUi(self) -> Ui_FolderListWidget:
-
         """ Designer-generated user interface elements. """
 
         return self.__ui
-    
-    def __init__(self, 
-            title: str = "Folder List",
-            contents: typing.List[str] = {},
-            parent: QWidget = None, 
-            flags: typing.Union[QtCore.Qt.WindowFlags, QtCore.Qt.WindowType] = QtCore.Qt.WindowFlags()
-    ) -> None:
+
+    def __init__(self,
+                 title: str = "Folder List",
+                 contents: typing.List[str] = {},
+                 parent: QWidget = None,
+                 flags: typing.Union[QtCore.Qt.WindowFlags,
+                                     QtCore.Qt.WindowType] = QtCore.Qt.WindowFlags()
+                 ) -> None:
         """
             A Widget that allows the user to select multiple Folders.
 
@@ -74,7 +73,6 @@ class FolderListWidget(QWidget):
         self.setContents(contents)
 
     def __setupUI(self, parent: QWidget, title: str) -> None:
-        
         """ Applies our pre-generated design to this procedural widget. """
 
         self.__ui = Ui_FolderListWidget()
@@ -82,17 +80,16 @@ class FolderListWidget(QWidget):
         self.__ui.GroupProjectFolders.setTitle(title)
 
     def __setupEvents(self) -> None:
-
         """ Binds important logic to the UI elements that require them. """
 
         ui = self.getUi()
 
-        ui.FolderList.itemSelectionChanged.connect(lambda: self.__handleSelectionChange())
+        ui.FolderList.itemSelectionChanged.connect(
+            lambda: self.__handleSelectionChange())
         ui.ButtonRemoveFolder.clicked.connect(lambda: self.__removeFolder())
         ui.ButtonAddFolder.clicked.connect(lambda: self.__addFolder())
 
     def __handleSelectionChange(self) -> None:
-
         """ Disables or enabled the 'Remove' button if we are currently selecting anything. """
 
         ui = self.getUi()
@@ -101,7 +98,6 @@ class FolderListWidget(QWidget):
         ui.ButtonRemoveFolder.setEnabled(len(selectedItems) > 0)
 
     def __addFolder(self) -> None:
-
         """ Prompts the user to select a folder from their directory, and adds it to the list. """
 
         ui = self.getUi()
@@ -114,7 +110,6 @@ class FolderListWidget(QWidget):
                 ui.FolderList.addItem(path)
 
     def __removeFolder(self) -> None:
-
         """ Removes the folders that are currently selected from the list. """
 
         ui = self.getUi()
@@ -127,6 +122,7 @@ class FolderListWidget(QWidget):
 
         for index in indexes:
             folderList.takeItem(index.row())
+
 
 if __name__ == "__main__":
 
