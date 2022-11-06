@@ -15,7 +15,7 @@ from src.CustomSortTreeWidgetItem import CustomSortTreeWidgetItem
 
 class ProjectData:
     def openProject(self):
-        if (self.unityPath == None):
+        if self.unityPath == None:
             print("Could not find valid unity editor path")
             return False
         self.timeSinceModifiedDisplay = "Just now!"
@@ -25,9 +25,9 @@ class ProjectData:
         return True
 
     def setDescription(self, text=None):
-        if (not text):
+        if not text:
             text = ProjectData.getDescriptionDialogue(self.parent, self)
-        if (text):
+        if text:
             self.description = text
             self.rowWidget.setText(2, text)
             with open(self.descriptionFilePath, "w") as file:
@@ -37,12 +37,12 @@ class ProjectData:
     def getDescriptionDialogue(parent, projectData=None):
         dialog = QtWidgets.QInputDialog(parent)
         dialog.setOptions(QtWidgets.QInputDialog.UsePlainTextEditForTextInput)
-        if (projectData and projectData.name):
+        if projectData and projectData.name:
             dialog.setWindowTitle(projectData.name + " Description")
         else:
             dialog.setWindowTitle("Description")
         dialog.setLabelText("Edit Description")
-        if(projectData):
+        if projectData:
             dialog.setTextValue(projectData.description)
         dialog.setWindowFlag(
             QtCore.Qt.WindowType.WindowContextHelpButtonHint, False)
@@ -51,17 +51,17 @@ class ProjectData:
         dialog.resize(600, 200)
         ok = dialog.exec_()
         text = dialog.textValue()
-        if (ok):
+        if ok:
             return text
         return None
 
     def setIcon(self, img=None):
 
-        if (not img):
+        if not img:
             img = ProjectData.getIconDialogue()
-        if (not img):
+        if not img:
             return
-        if (self.iconExists):
+        if self.iconExists:
             send2trash(self.iconPath)
         img.save(self.iconPath)
 
@@ -73,7 +73,7 @@ class ProjectData:
         fileDialog = QtWidgets.QFileDialog()
         fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
         selected = fileDialog.exec()
-        if (selected):
+        if selected:
             file = fileDialog.selectedFiles()[0]
 
             img = Image.open(file)
@@ -81,7 +81,7 @@ class ProjectData:
             basewidth = 300
             baseHeight = 300
 
-            if (img.width < img.height):
+            if img.width < img.height:
                 wpercent = (basewidth / float(img.width))
                 hsize = int((float(img.height) * float(wpercent)))
                 img = img.resize((basewidth, hsize), Image.ANTIALIAS)
@@ -108,10 +108,10 @@ class ProjectData:
         MenuItems = os.path.join(editorScriptsFolder, "MenuItems.cs")
         TextureScale = os.path.join(editorScriptsFolder, "TextureScale.cs")
 
-        if (not os.path.exists(MenuItems)):
+        if not os.path.exists(MenuItems):
             return 1
 
-        if (not os.path.exists(TextureScale)):
+        if not os.path.exists(TextureScale):
             return 1
 
         expectedFirstLine = r"//" + os.environ["UNITY_LAUNCHER_VERSION"]
@@ -124,7 +124,7 @@ class ProjectData:
             first_line = f.readline()
             textureScaleUptoDate = first_line.startswith(expectedFirstLine)
 
-        if (menuItemsUptoDate and textureScaleUptoDate):
+        if menuItemsUptoDate and textureScaleUptoDate:
             return 0
         else:
             return 2
@@ -151,7 +151,7 @@ class ProjectData:
         msgBox.setStandardButtons(
             QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
         msgBox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
-        if (msgBox.exec() == QtWidgets.QMessageBox.StandardButton.Yes):
+        if msgBox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
             send2trash(self.projectPath)
             index = self.parent.indexOfTopLevelItem(self.rowWidget)
             self.parent.takeTopLevelItem(index)
@@ -161,7 +161,7 @@ class ProjectData:
         self.name = name
         self.projectPath = projectPath.replace('/', '\\')
         self.unityPath = unityPath
-        if (self.unityPath):
+        if self.unityPath:
             self.unityPath = self.unityPath.replace('/', '\\')
         self.editorVersion = editorVersion
 
@@ -180,7 +180,7 @@ class ProjectData:
         self.descriptionFilePath = os.path.join(
             self.projectPath, "description.txt")
         self.descriptionExists = os.path.exists(self.descriptionFilePath)
-        if (self.descriptionExists):
+        if self.descriptionExists:
             with open(self.descriptionFilePath) as descriptionFile:
                 self.description = descriptionFile.read()
         else:
@@ -198,33 +198,33 @@ class ProjectData:
         months = days/30
         years = days/365
 
-        if (years >= 1):
+        if years >= 1:
             self.timeSinceModifiedDisplay = str(round(years, 1)) + " years ago"
-        elif (months >= 1):
-            if (round(months) == 1):
+        elif months >= 1:
+            if round(months) == 1:
                 self.timeSinceModifiedDisplay = "a month ago"
             else:
                 self.timeSinceModifiedDisplay = str(
                     round(months)) + " months ago"
-        elif (days >= 1):
-            if (round(days) == 1):
+        elif days >= 1:
+            if round(days) == 1:
                 self.timeSinceModifiedDisplay = "a day ago"
             else:
                 self.timeSinceModifiedDisplay = str(round(days)) + " days ago"
-        elif (hours >= 1):
-            if (round(hours) == 1):
+        elif hours >= 1:
+            if round(hours) == 1:
                 self.timeSinceModifiedDisplay = "an hour ago"
             else:
                 self.timeSinceModifiedDisplay = str(
                     round(hours)) + " hours ago"
-        elif (minutes >= 1):
-            if (round(minutes) == 1):
+        elif minutes >= 1:
+            if round(minutes) == 1:
                 self.timeSinceModifiedDisplay = "a minute ago"
             else:
                 self.timeSinceModifiedDisplay = str(
                     round(minutes)) + " minutes ago"
         else:
-            if (round(self.secondsSinceModified) == 1):
+            if round(self.secondsSinceModified) == 1:
                 self.timeSinceModifiedDisplay = "a second ago"
             else:
                 self.timeSinceModifiedDisplay = str(
@@ -271,7 +271,7 @@ class ProjectData:
 
         self.iconPath = os.path.join(self.projectPath, "icon.png")
         self.iconExists = os.path.exists(self.iconPath)
-        if (self.iconExists):
+        if self.iconExists:
             self.iconLabel.setPixmap(QtGui.QPixmap(self.iconPath))
         else:
             self.iconLabel.setPixmap(QtGui.QPixmap(
@@ -284,7 +284,7 @@ class ProjectData:
         # TODO: Executing it after everything else has been initialized seems to fix the problem.
         parent.setItemWidget(self.rowWidget, 0, self.iconLabel)
 
-        if (self.iconExists):
+        if self.iconExists:
             self.rowWidget.setSortData(0, self.iconPath)
         else:
             self.rowWidget.setSortData(0, "")

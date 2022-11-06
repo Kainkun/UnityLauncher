@@ -8,7 +8,7 @@ from PyQt5 import QtCore
 import os
 import sys
 
-if (os.path.basename(sys.executable) == "UnityLauncher.exe"):
+if os.path.basename(sys.executable) == "UnityLauncher.exe":
     # applicationPath = os.path.dirname(sys.executable)
     os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.dirname(
         sys.executable)
@@ -74,7 +74,7 @@ class UiImplement(Ui_MainWindow):
 
     def setAllProjectIcons(self):
         img = ProjectData.getIconDialogue()
-        if(not img):
+        if not img:
             return
         for i in range(self.projectTree.invisibleRootItem().childCount()):
             projectData: ProjectData = self.projectTree.invisibleRootItem().child(i).data(0, QtCore.Qt.UserRole)
@@ -82,7 +82,7 @@ class UiImplement(Ui_MainWindow):
 
     def setAllProjectDescriptions(self):
         text = ProjectData.getDescriptionDialogue(self.parent)
-        if(not text):
+        if not text:
             return
         for i in range(self.projectTree.invisibleRootItem().childCount()):
             projectData: ProjectData = self.projectTree.invisibleRootItem().child(i).data(0, QtCore.Qt.UserRole)
@@ -96,7 +96,7 @@ class UiImplement(Ui_MainWindow):
     def addProjectsToList(self):
         self.parent.config.readChanges()
         for projectsFolderPath in self.parent.config.getProjectFolders():
-            if (not os.path.exists(projectsFolderPath)):
+            if not os.path.exists(projectsFolderPath):
                 print('Error: Projects Folder "{0}" Does Not Exist'.format(
                     projectsFolderPath))
                 continue
@@ -105,14 +105,14 @@ class UiImplement(Ui_MainWindow):
                 projectPath = os.path.join(
                     projectsFolderPath, projectFolderName)
 
-                if (not os.path.exists(projectPath)):
+                if not os.path.exists(projectPath):
                     print('Error: Project Folder "{0}" Does Not Exist'.format(
                         projectPath))
                     continue
 
                 editorVersionPath = os.path.join(
                     projectPath, r"ProjectSettings\ProjectVersion.txt")
-                if (not os.path.exists(editorVersionPath)):
+                if not os.path.exists(editorVersionPath):
                     print('Error: ProjectVersion.txt not found for "{0}"'.format(
                         projectFolderName))
                     continue
@@ -124,7 +124,7 @@ class UiImplement(Ui_MainWindow):
                 for unityEditorFolder in self.parent.config.getEditorFolders():
                     tryUnityPath = os.path.join(
                         unityEditorFolder, editorVersion, r"Editor\Unity.exe")
-                    if (os.path.exists(tryUnityPath)):
+                    if os.path.exists(tryUnityPath):
                         unityPath = tryUnityPath
                         break
 
@@ -133,7 +133,7 @@ class UiImplement(Ui_MainWindow):
 
     def projectClicked(self, item: QtWidgets.QTreeWidgetItem):
         success = item.data(0, QtCore.Qt.UserRole).openProject()
-        if (not success):
+        if not success:
             msg = QtWidgets.QMessageBox(self.parent)
             # msg.setIcon(QtWidgets.QMessageBox.warning())
             msg.setText("Missing Unity Version")
@@ -145,7 +145,7 @@ class UiImplement(Ui_MainWindow):
 
     def projectContextMenu(self, position: QtCore.QPoint):
         item = self.projectTree.itemAt(position)
-        if (item == None):
+        if item == None:
             return
         projectData: ProjectData = item.data(0, QtCore.Qt.UserRole)
         menu = QtWidgets.QMenu(self.parent)
@@ -156,12 +156,11 @@ class UiImplement(Ui_MainWindow):
                        lambda: projectData.showInExplorer())
 
         result = projectData.EditorScriptsUpToDate()
-        print(result)
-        if (result == 1):
+        if result == 1:
             menu.addSeparator()
             menu.addAction("Add Editor Scripts",
                            lambda: projectData.AddEditorScripts())
-        elif (result == 2):
+        elif result == 2:
             menu.addSeparator()
             menu.addAction("Update Editor Scripts",
                            lambda: projectData.AddEditorScripts())
@@ -176,7 +175,7 @@ class UiImplement(Ui_MainWindow):
             item = self.projectTree.topLevelItem(index)
             searchText = ''.join(filter(str.isalnum, text.lower()))
             itemText = ''.join(filter(str.isalnum, item.text(1).lower()))
-            if (searchText in itemText):
+            if searchText in itemText:
                 item.setHidden(False)
             else:
                 item.setHidden(True)
