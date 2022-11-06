@@ -140,6 +140,8 @@ class UiImplement(Ui_MainWindow):
 
         menu.addSeparator()
         menu.addAction("Delete Project", lambda: projectData.deleteProject())
+
+        menu.setStyleSheet("QMenu::item:selected { background-color:rgb(38, 38, 38) }")
         menu.exec(self.projectTree.mapToGlobal(position))
 
     def searchBarChanged(self, text: str):
