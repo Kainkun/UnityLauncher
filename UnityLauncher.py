@@ -18,6 +18,12 @@ else:
 
 os.environ["UNITY_LAUNCHER_VERSION"] = "v1.1"
 
+# todo: move this free method somewhere else, with other common utilities?
+# todo: this current implementation is window-specific, we want to add some os checking to change the location
+def openLogs():
+    localAppData = os.getenv("LOCALAPPDATA")
+    logPath = f"{localAppData}\\Unity\\Editor\\Editor.log"
+    os.startfile(logPath)
 
 class LauncherMainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args):
@@ -64,7 +70,10 @@ class UiImplement(Ui_MainWindow):
         self.searchLineEdit.textChanged.connect(
             lambda text: self.searchBarChanged(text))
 
+        # registering new menu-bar items
         self.menubar.addAction("Settings", lambda: self.__openSettings())
+        self.menubar.addAction("Logs", lambda: openLogs())
+
         self.actionSet_All_Project_Icons.triggered.connect(
             lambda: self.setAllProjectIcons())
         self.actionSet_All_Project_Descriptions.triggered.connect(
@@ -152,8 +161,7 @@ class UiImplement(Ui_MainWindow):
         menu.addAction("Set Icon", lambda: projectData.setIcon())
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addSeparator()
-        menu.addAction("Show in Explorer",
-                       lambda: projectData.showInExplorer())
+        menu.addAction("Show in Explorer",lambda: projectData.showInExplorer())
 
         result = projectData.EditorScriptsUpToDate()
         if result == 1:
