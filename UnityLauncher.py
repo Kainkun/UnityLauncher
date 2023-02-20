@@ -162,6 +162,7 @@ class UiImplement(Ui_MainWindow):
         menu.addAction("Set Description", lambda: projectData.setDescription())
         menu.addSeparator()
         menu.addAction("Show in Explorer",lambda: projectData.showInExplorer())
+        menu.addAction("Build Window 64", lambda: projectData.buildWindows64())
 
         result = projectData.EditorScriptsUpToDate()
         if result == 1:
