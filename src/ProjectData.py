@@ -24,8 +24,8 @@ class ProjectData:
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
         return True
 
-    # todo: double check the path stuff here is OS independent, add more options for building (like different platforms, maybe one of each, automate every night ect.)
-    # todo: make a better loading window while the build is processing so it doesnt look like we just crashed
+    # TODO: double check the path stuff here is OS independent, add more options for building (like different platforms, maybe one of each, automate every night ect.)
+    # TODO: make a better loading window while the build is processing so it doesnt look like we just crashed
     def buildWindows64(self):
         buildPath = f"{self.projectPath}\\Builds\\UnityLauncherBuild\\"
 

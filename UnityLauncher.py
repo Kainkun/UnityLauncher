@@ -1,6 +1,7 @@
 from src.SettingsDialog import SettingsDialog
 from src.ProjectData import ProjectData
 from src.Config import Config
+from src import UnityUtilities
 from generated.UnityLauncherGenerated import Ui_MainWindow
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
@@ -17,13 +18,6 @@ else:
     os.environ["UNITY_LAUNCHER_APPLICATION_PATH"] = os.path.abspath(".")
 
 os.environ["UNITY_LAUNCHER_VERSION"] = "v1.1"
-
-# todo: move this free method somewhere else, with other common utilities?
-# todo: this current implementation is window-specific, we want to add some os checking to change the location
-def openLogs():
-    localAppData = os.getenv("LOCALAPPDATA")
-    logPath = f"{localAppData}\\Unity\\Editor\\Editor.log"
-    os.startfile(logPath)
 
 class LauncherMainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args):
@@ -72,7 +66,7 @@ class UiImplement(Ui_MainWindow):
 
         # registering new menu-bar items
         self.menubar.addAction("Settings", lambda: self.__openSettings())
-        self.menubar.addAction("Logs", lambda: openLogs())
+        self.menubar.addAction("Logs", lambda: UnityUtilities.openLogs())
 
         self.actionSet_All_Project_Icons.triggered.connect(
             lambda: self.setAllProjectIcons())
