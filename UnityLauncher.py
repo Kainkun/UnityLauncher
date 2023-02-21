@@ -154,9 +154,15 @@ class UiImplement(Ui_MainWindow):
         menu = QtWidgets.QMenu(self.parent)
         menu.addAction("Set Icon", lambda: projectData.setIcon())
         menu.addAction("Set Description", lambda: projectData.setDescription())
+
         menu.addSeparator()
         menu.addAction("Show in Explorer",lambda: projectData.showInExplorer())
-        menu.addAction("Build Window 64", lambda: projectData.buildWindows64())
+
+        menu.addSeparator()
+        menu.addAction("Build Windows 64", lambda: projectData.buildWindows64())
+        menu.addAction("Build Windows 32", lambda: projectData.buildWindows32())
+        menu.addAction("Build OSX", lambda: projectData.buildOSXUniversal())
+        menu.addAction("Build Linux", lambda: projectData.buildLinux64())
 
         result = projectData.EditorScriptsUpToDate()
         if result == 1:

@@ -24,15 +24,27 @@ class ProjectData:
         subprocess.Popen([self.unityPath, '-projectPath', self.projectPath])
         return True
 
+    def buildLinux64(self):
+        self.__buildHelper("-buildLinux64Player", "Linux 64", "Application")
+
+    def buildOSXUniversal(self):
+        self.__buildHelper("-buildOSXUniversalPlayer", "OSX", "Application.app")
+
+    def buildWindows64(self):
+        self.__buildHelper("-buildWindows64Player", "Windows 64", "Application.exe")
+
+    def buildWindows32(self):
+        self.__buildHelper("-buildWindowsPlayer", "Windows 32", "Application.exe")
+
     # TODO: double check the path stuff here is OS independent, add more options for building (like different platforms, maybe one of each, automate every night ect.)
     # TODO: make a better loading window while the build is processing so it doesnt look like we just crashed
-    def buildWindows64(self):
-        buildPath = f"{self.projectPath}\\Builds\\UnityLauncherBuild\\"
+    def __buildHelper(self, buildType, buildFolderName, applicationName):
+        buildPath = f"{self.projectPath}\\Builds\\UnityLauncherBuild\\{buildFolderName}\\"
 
         if not os.path.exists(buildPath):
             os.makedirs(buildPath)
 
-        subprocess.call([self.unityPath, '-projectPath', self.projectPath, '-batchmode', '-buildWindows64Player', f"{buildPath}\\Application.exe", '-quit'])
+        subprocess.call([self.unityPath, '-projectPath', self.projectPath, '-batchmode', buildType, f"{buildPath}\\{applicationName}", '-quit'])
 
     def setDescription(self, text=None):
         if not text:
