@@ -2,63 +2,67 @@ from collections import OrderedDict
 
 import os
 import json
-import typing
-
 
 class Config():
     """ 
         Handles the serialization and deserialization of persistent data for the UnityLauncher.
 
         - Functions:
-            - setProjectFolders(List[str]) -> None
-            - setEditorFolders(List[str]) -> None
-            - getProjectFolders() -> List[str]
-            - getEditorFolders() -> List[str]
             - writeChanges() -> None
             - readChanges() -> None
+            - setWindowSize(tuple[int, int]) -> None
+            - getWindowSize() -> tuple[int, int] 
+            - setWindowPosition() -> None
+            - getWindowPosition() -> tuple[int, int]
+            - setProjectFolders(list[str]) -> None
+            - setEditorFolders(list[str]) -> None
+            - getProjectFolders() -> list[str]
+            - getEditorFolders() -> list[str]
 
         - Notes:
             - Follows the MonoState pattern: https://wiki.c2.com/?MonostatePattern, so 
             keep in mind there is hidden static state associated with this class.
     """
 
-    __configData: typing.OrderedDict = {}
+    __configData: OrderedDict = {}
     __configName: str = "config.json"
-    __windowSize = "LauncherWindowSize"
-    __windowPosition = "LauncherWindowPosition"
+
+    # KEYS
+    __windowSizeKey = "LauncherWindowSize"
+    __windowPositionKey = "LauncherWindowPosition"
     __projectFoldersKey = "ProjectFolders"
     __editorFoldersKey = "EditorFolders"
 
     # Getter-Setter for Window size
 
-    def setWindowSize(self, size) -> None:
-        self.__configData[self.__windowSize] = size
+    def setWindowSize(self, size: tuple[int, int]) -> None:
+        self.__configData[self.__windowSizeKey] = size
 
-    def getWindowSize(self):
-        return self.__configData[self.__windowSize]
+    def getWindowSize(self) -> tuple[int, int]:
+        return self.__configData[self.__windowSizeKey]
 
     # Getter-Setter for Window position
 
-    def setWindowPosition(self, position) -> None:
-        self.__configData[self.__windowPosition] = position
+    def setWindowPosition(self, position: tuple[int, int]) -> None:
+        self.__configData[self.__windowPositionKey] = position
 
-    def getWindowPosition(self):
-        return self.__configData[self.__windowPosition]
+    def getWindowPosition(self) -> tuple[int, int]:
+        return self.__configData[self.__windowPositionKey]
 
     # Getter-Setter for Project Folders
 
-    def setProjectFolders(self, folders: typing.List[str]) -> None:
+    def setProjectFolders(self, folders: list[str]) -> None:
         self.__configData[self.__projectFoldersKey] = folders
 
-    def getProjectFolders(self) -> typing.List[str]:
+    def getProjectFolders(self) -> list[str]:
         return self.__configData[self.__projectFoldersKey]
 
     # Getter-Setter for Editor Folders
 
-    def setEditorFolders(self, folders: typing.List[str]) -> None:
+    def setEditorFolders(self, folders: list[str]) -> None:
         self.__configData[self.__editorFoldersKey] = folders
 
-    def getEditorFolders(self) -> typing.List[str]:
+    def getEditorFolders(self) -> list[str]:
         return self.__configData[self.__editorFoldersKey]
 
     # Serialization
@@ -80,12 +84,12 @@ class Config():
 
         self.readChanges()
 
-    def __createDefaultConfig(self) -> typing.OrderedDict:
+    def __createDefaultConfig(self) -> OrderedDict:
         """ Creates the default JSON structure for first-time users. """
 
         d = OrderedDict()
-        d[self.__windowSize] = [830, 535]
-        d[self.__windowPosition] = [1504, 767]
+        d[self.__windowSizeKey] = [830, 535]
+        d[self.__windowPositionKey] = [1504, 767]
         d[self.__projectFoldersKey] = []
         d[self.__editorFoldersKey] = []
         return d

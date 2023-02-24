@@ -37,14 +37,17 @@ class ProjectData:
         self.__buildHelper("-buildWindowsPlayer", "Windows 32", "Application.exe")
 
     # TODO: double check the path stuff here is OS independent, add more options for building (like different platforms, maybe one of each, automate every night ect.)
-    # TODO: make a better loading window while the build is processing so it doesnt look like we just crashed
+    # TODO: make a better loading window while the build is processing so it doesnt look like we just crashed [ADDENDUM] now its non-blocking, but we probably want
+    # TODO: ... a better way to keep track of the current build jobs - maybe go back to the blocking method and throw it on a new thread?
     def __buildHelper(self, buildType, buildFolderName, applicationName):
-        buildPath = f"{self.projectPath}\\Builds\\UnityLauncherBuild\\{buildFolderName}\\"
+        
+        buildPath = os.path.join(self.projectPath, 'Builds', 'UnityLauncherBuild', buildFolderName)
+        applicationPath = os.path.join(buildPath, applicationName)
 
         if not os.path.exists(buildPath):
             os.makedirs(buildPath)
 
-        subprocess.call([self.unityPath, '-projectPath', self.projectPath, '-batchmode', buildType, f"{buildPath}\\{applicationName}", '-quit'])
+        subprocess.Popen([self.unityPath, '-projectPath', self.projectPath, '-batchmode', buildType, applicationPath, '-quit'])
 
     def setDescription(self, text=None):
         if not text:
