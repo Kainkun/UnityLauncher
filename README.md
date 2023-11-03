@@ -3,7 +3,7 @@ This PyQt Tool lists your Unity projects with icons and descriptions!
 ### Features
 - Automatically populates Unity projects from chosen folders
 - Set icons and descriptions to organize your projects
-- Easily take in-game screenshots that get set as project icons
+- Easily take in-engine screenshots that get set as project icons
 - Sort and Search for projects
 
 This tool is currently only for launching projects. To create new projects and install editors, please use Unity Hub :)
